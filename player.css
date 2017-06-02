@@ -36,7 +36,12 @@
 
 .player > .info {
   position: relative;
-  background: rgba(50, 50, 50, 0.85);
+  background: rgba(50,50,50,1);
+  background: -moz-linear-gradient(bottom, rgba(50,50,50,1) 0%, rgba(50,50,50,1) 15%, rgba(50,50,50,0.68) 73%, rgba(50,50,50,0.62) 83%, rgba(50,50,50,0) 100%);
+  background: -webkit-linear-gradient(bottom, rgba(50,50,50,1) 0%, rgba(50,50,50,1) 15%, rgba(50,50,50,0.68) 73%, rgba(50,50,50,0.62) 83%, rgba(50,50,50,0) 100%);
+  background: -o-linear-gradient(bottom, rgba(50,50,50,1) 0%, rgba(50,50,50,1) 15%, rgba(50,50,50,0.68) 73%, rgba(50,50,50,0.62) 83%, rgba(50,50,50,0) 100%);
+  background: -ms-linear-gradient(bottom, rgba(50,50,50,1) 0%, rgba(50,50,50,1) 15%, rgba(50,50,50,0.68) 73%, rgba(50,50,50,0.62) 83%, rgba(50,50,50,0) 100%);
+  background: linear-gradient(to top, rgba(50,50,50,1) 0%, rgba(50,50,50,1) 15%, rgba(50,50,50,0.68) 73%, rgba(50,50,50,0.62) 83%, rgba(50,50,50,0) 100%);
 }
 
 .player > .info > .cover {
@@ -64,7 +69,7 @@
   font-size: 14px;
 }
 
-.player > .info > .meta > .artist {
+.player > .info > .meta > .artist, .player > .info > .meta > .streamer {
   font-size: 12px;
   color: #999999;
 }
@@ -90,7 +95,7 @@
   position: absolute;
   background: #ffffff;
   width: 100%;
-  height: 20%;
+  height: 13%;
   border-radius: 5px;
 }
 .playbutton.paused {
@@ -106,16 +111,16 @@
 }
 .playbutton > .bar2 {
   transform: rotate(27deg) translate(0%, -50%);
-  top: 28%;
+  top: 27%;
   width: 107.8%;
-  right: 1%;
+  right: -4%;
   transition: all 0.5s;
 }
 .playbutton > .bar3 {
   transform: rotate(-27deg) translate(0%, -50%);
-  top: 69%;
+  top: 71%;
   width: 108.8%;
-  right: -9%;
+  right: -11%;
   transition: all 0.5s;
 }
 
@@ -156,7 +161,7 @@
 }
 
 .mute.muted > .waves {
-  transform: rotate(180deg);
+  transform: rotate(-180deg);
   transition: all 0.5s;
 }
 
@@ -172,15 +177,16 @@
   right: 66%;
   transform: translateY(-50%);
   animation: mute 3s;
-  transition: 0.5s all, 0.001 border-bottom-color;
+  transition: 0.5s all, 0.1s border-bottom-color;
 }
 
 .mute > .waves > .wave2 {
   height: 150%;
   width: 150%;
   right: 33%;
-  transition: 0.5s all, 0.001s border-top-color;
+  transition: 0.5s all, 0.1s border-top-color;
 }
+
 .mute.muted .waves > .wave1 {
   border-radius: 0;
   border-bottom-color: #FFFFFF;
@@ -188,16 +194,17 @@
   height: 50%;
   transform: rotate(45deg);
   top: -1%;
-  left: 22%;
-  transition: 0.5s all;
+  right: 22%;
+  transition: 0.5s all, 0.1s border-bottom-color;
 }
+
 .mute.muted .waves > .wave2 {
   width: 50%;
   height: 50%;
   border-radius: 0;
   transform: rotate(-45deg);
   border-top-color: #ffffff;
-  left: 21%;
+  right: 21%;
   top: 55%;
-  transition: 0.5s all;
+  transition: 0.5s all, 0.1s border-bottom-color;
 }
