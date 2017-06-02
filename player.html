@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="player.js" charset="utf-8"></script>
+    <script src="jsonp.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="player.css">
+     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&amp;subset=latin-ext" rel="stylesheet">
+    <title>Document</title>
+    <style media="screen">
+      #container {
+        width: 270px;
+        padding: 100px 0;
+        margin: 0 auto;
+      }
+
+      body, html {
+        margin: 0;
+        padding: 0;
+        background: #F9F9F9;
+        font-family: sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- <script type="text/javascript">
+      console.log(escapeHTML('<div>witam</div>'));
+      var shoutcast = new Shoutcast('http://s7.radioparty.pl:8000', null);
+      shoutcast.fetchPlayed(function(data) {
+        console.log(data);
+      });
+    </script> -->
+    <div id="container">
+      <div class="player">
+        <div class="background-cover"></div>
+        <div class="info">
+          <div class="cover">
+            <div class="image"></div>
+          </div>
+          <div class="meta">
+            <div class="title">Tytuł utworu</div>
+            <div class="artist">Wykonawca</div>
+            <div class="streamname">Nazwa streama lorem ipsum.</div>
+          </div>
+          <div class="controls">
+            <div class="playbutton" onclick="this.classList.toggle('paused')">
+              <div class="bar1"></div>
+              <div class="bar2"></div>
+              <div class="bar3"></div>
+            </div>
+            <div class="mute" onclick="this.classList.toggle('muted')">
+              <img src="volume-off.svg" alt="">
+              <div class="waves">
+                <div class="wave1"></div>
+                <div class="wave2"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <audio controls autoplay="autoplay"><source src="http://4stream.pl:18240/;stream.mp3?sid=1" type="audio/mp3"> -->
+  </body>
+</html>

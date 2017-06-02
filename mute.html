@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Mute</title>
+    <style media="screen">
+      body, html {
+        margin: 0;
+        padding: 0;
+        background: #323232;
+      }
+      #container {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      .mute > * {
+        display: inline-block;
+        position: relative;
+      }
+
+      .mute > .waves {
+        width: 30px;
+        padding-top: 50%;
+        position: relative;
+        transform: rotate(0deg);
+        transition: all 0.5s;
+        margin-left: -10%;
+      }
+
+      .mute.muted > .waves {
+        transform: rotate(180deg);
+        transition: all 0.5s;
+      }
+
+      .mute > .waves > div {
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        box-sizing: border-box;
+        top: 50%;
+        border: 3px solid #ffffff;
+        border-radius: 50%;
+        border-color: transparent #ffffff transparent transparent;
+        right: 66%;
+        transform: translateY(-50%);
+        animation: mute 3s;
+        transition: 0.5s all, 0.001 border-bottom-color;
+      }
+
+      .mute > .waves > .wave2 {
+        height: 150%;
+        width: 150%;
+        right: 33%;
+        transition: 0.5s all, 0.001s border-top-color;
+      }
+      .mute.muted .waves > .wave1 {
+        border-radius: 0;
+        border-bottom-color: #FFFFFF;
+        width: 50%;
+        height: 50%;
+        transform: rotate(45deg);
+        top: -1%;
+        left: 22%;
+        transition: 0.5s all;
+      }
+      .mute.muted .waves > .wave2 {
+        width: 50%;
+        height: 50%;
+        border-radius: 0;
+        transform: rotate(-45deg);
+        border-top-color: #ffffff;
+        left: 21%;
+        top: 55%;
+        transition: 0.5s all;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <div class="mute" onclick="this.classList.toggle('muted')">
+        <img src="volume-off.svg" alt="">
+        <div class="waves">
+          <div class="wave1"></div>
+          <div class="wave2"></div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

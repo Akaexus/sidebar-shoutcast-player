@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style media="screen">
+      body, html {
+        margin: 0;
+        padding: 0;
+        background: #323232;
+      }
+      #container {
+        position: absolute;
+
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+      .playbutton {
+        position: relative;
+        height: 30px;
+        width: 30px;
+        transform: rotate(0);
+        transition: all 0.5s;
+      }
+      .playbutton > div {
+        position: absolute;
+        background: #ffffff;
+        width: 100%;
+        height: 20%;
+        border-radius: 5px;
+      }
+      .playbutton.paused {
+        transform: rotate(180deg);
+        transition: all 0.5s;
+      }
+
+      .playbutton > .bar1 {
+        top: 50%;
+        transform: translate(-40%, -50%) rotate(90deg);
+        transition: all 0.5s;
+        left: 0;
+      }
+      .playbutton > .bar2 {
+        transform: rotate(27deg) translate(0%, -50%);
+        top: 28%;
+        width: 107.8%;
+        right: 1%;
+        transition: all 0.5s;
+      }
+      .playbutton > .bar3 {
+        transform: rotate(-27deg) translate(0%, -50%);
+        top: 69%;
+        width: 108.8%;
+        right: -9%;
+        transition: all 0.5s;
+      }
+
+      .playbutton.paused > .bar3 {
+        transform: rotate(90deg) translate(0, 0);
+        width: 100%;
+        right: -24%;
+        top: 40%;
+        transition: all 0.5s;
+      }
+
+      .playbutton.paused > .bar1 {
+        left: 15%;
+        transition: all 0.5s;
+      }
+
+      .playbutton.paused > .bar2 {
+        transform: rotate(90deg) translate(0, 0);
+        width: 100%;
+        right: -24%;
+        top: 40%;
+        transition: all 0.5s;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <div class="playbutton">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+      </div>
+    </div>
+    <button onclick="document.getElementsByClassName('playbutton')[0].classList.toggle('paused')">x</button>
+  </body>
+</html>
