@@ -2,7 +2,7 @@
   height: 0;
   width: 0;
   border-bottom: 10px solid transparent;
-  border-left: 17.32051px solid #FFFFFF;
+  border-left: 17.32051px solid rgba(255, 255, 255, 0.8);
   border-top: 10px solid transparent;
 }
 
@@ -10,7 +10,7 @@
   height: 0;
   width: 0;
   border-bottom: 10px solid transparent;
-  border-left: 17.32051px solid #FFFFFF;
+  border-right: 17.32051px solid rgba(255, 255, 255, 0.8);
   border-top: 10px solid transparent;
 }
 
@@ -295,7 +295,7 @@
 .player > .background-cover {
   -webkit-filter: blur(5px);
   filter: blur(5px);
-  background: #323232 url("http://i.imgur.com/Ez8LfSZ.jpg") no-repeat 50% 50%/150% auto;
+  background: #323232 url("http://i.imgur.com/Ez8LfSZ.jpg") no-repeat 50% 50%/auto 110%;
   height: 100%;
   position: absolute;
   width: 100%;
@@ -313,6 +313,15 @@
   width: 100%;
   padding-top: 80%;
   position: relative;
+}
+.player > .info > .cover > .triangle {
+  position: absolute;
+  top: 61%;
+  left: 10%;
+  transform: translate(-50%, -50%);
+}
+.player > .info > .cover > .triangle.triangle-right {
+  left: 90%;
 }
 .player > .info > .cover > .image {
   background: #323232 url("http://i.imgur.com/Ez8LfSZ.jpg") no-repeat 50% 50%/cover;
@@ -339,7 +348,7 @@
   color: #999999;
 }
 .player > .info > .controls {
-  padding: 5px;
+  padding: 15px 5px;
   box-sizing: border-box;
   display: flex;
   justify-content: space-around;

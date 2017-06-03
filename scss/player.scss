@@ -12,7 +12,7 @@
   position: relative;
   >.background-cover {
     @include filter(blur(5px));
-    background: #323232 url('http://i.imgur.com/Ez8LfSZ.jpg') no-repeat 50% 50% / 150% auto;
+    background: #323232 url('http://i.imgur.com/Ez8LfSZ.jpg') no-repeat 50% 50% / auto 110%;
     height: 100%;
     position: absolute;
     width: 100%;
@@ -29,6 +29,15 @@
       width: 100%;
       padding-top: 80%;
       position: relative;
+      > .triangle {
+        position: absolute;
+        top: 61%;
+        left: 10%;
+        transform: translate(-50%, -50%);
+        &.triangle-right {
+          left: 90%;
+        }
+      }
       > .image {
         background: #323232 url('http://i.imgur.com/Ez8LfSZ.jpg') no-repeat 50% 50% / cover;
         width: 60%;
@@ -51,7 +60,7 @@
       }
     }
     > .controls {
-      padding: 5px;
+      padding: 15px 5px;
       box-sizing: border-box;
       display: flex;
       justify-content: space-around;
