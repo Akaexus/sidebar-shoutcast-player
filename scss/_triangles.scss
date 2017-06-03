@@ -3,11 +3,11 @@
 $triangleSize: 20px;
 
 .triangle-right {
-  @include triangle($triangleSize sqrt(3)*($triangleSize/2), #FFFFFF, right);
+  @include triangle($triangleSize sqrt(3)*($triangleSize/2), rgba(255, 255, 255, 0.8), right);
 }
 
 .triangle-left {
-  @include triangle($triangleSize sqrt(3)*($triangleSize/2), #FFFFFF, left);
+  @include triangle($triangleSize sqrt(3)*($triangleSize/2), rgba(255, 255, 255, 0.8), left);
 }
 
 .triangle-left,
