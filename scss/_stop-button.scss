@@ -1,0 +1,56 @@
+@import 'bourbon/bourbon';
+@import 'config';
+.stop {
+  height: 30px;
+  width: 30px;
+  position: relative;
+  @include transform(rotate(0deg));
+  @include transition(all 0.5s);
+  >div {
+    height: 10%;
+    width: 100%;
+    background: #FFFFFF;
+    border-radius: 5px;
+    position: absolute;
+    transform-origin: 0% 0%;
+    @include transition(all $animationTimeout);
+    &.bar1, &.bar4 {
+      @include transform(translate(-50%, 0) rotate(0));
+      top: 0;
+      left: 50%;
+    }
+    &.bar2 {
+      transform-origin: 100% 0%;
+      left: -100%;
+      top: 100%;
+    }
+    &.bar2, &.bar3 {
+      @include transform(rotate(90deg) translate(0, -100%));
+    }
+    &.bar3 {
+      left: 100%;
+      @include transform(rotate(90deg) translate(0, 0));
+    }
+    &.bar4 {
+      top: 100%;
+      @include transform(translate(0%, 0%) rotate(180deg));
+      left: 100%;
+    }
+  }
+  &.stopped {
+    @include transform(rotate(90deg));
+    @include transition(all 0.5s);
+    >.bar1 {
+      @include transform(translate(-40%, 0) rotate(90deg));
+    }
+    >.bar2 {
+      @include transform(rotate(180deg) translate(0, 0%));
+    }
+    >.bar3 {
+      @include transform(rotate(180deg) translate(0%, -100%));
+    }
+    >.bar4 {
+      @include transform(translate(-10%, 0%) rotate(270deg));
+    }
+  }
+}

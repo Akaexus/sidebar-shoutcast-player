@@ -1,3 +1,24 @@
+.triangle-right {
+  height: 0;
+  width: 0;
+  border-bottom: 10px solid transparent;
+  border-left: 17.32051px solid #FFFFFF;
+  border-top: 10px solid transparent;
+}
+
+.triangle-left {
+  height: 0;
+  width: 0;
+  border-bottom: 10px solid transparent;
+  border-left: 17.32051px solid #FFFFFF;
+  border-top: 10px solid transparent;
+}
+
+.triangle-left.inactive,
+.triangle-right.inactive {
+  opacity: 0.5;
+}
+
 .mute > * {
   display: inline-block;
   position: relative;
@@ -72,27 +93,6 @@
   -ms-transform: rotate(-45deg);
   -o-transform: rotate(-45deg);
   transform: rotate(-45deg);
-}
-
-.triangle-right {
-  height: 0;
-  width: 0;
-  border-bottom: 10px solid transparent;
-  border-left: 17.32051px solid #FFFFFF;
-  border-top: 10px solid transparent;
-}
-
-.triangle-left {
-  height: 0;
-  width: 0;
-  border-bottom: 10px solid transparent;
-  border-left: 17.32051px solid #FFFFFF;
-  border-top: 10px solid transparent;
-}
-
-.triangle-left.inactive,
-.triangle-right.inactive {
-  opacity: 0.5;
 }
 
 .playbutton {
@@ -172,6 +172,107 @@
   -ms-transform: rotate(90deg) translate(0, 0);
   -o-transform: rotate(90deg) translate(0, 0);
   transform: rotate(90deg) translate(0, 0);
+}
+
+.stop {
+  height: 30px;
+  width: 30px;
+  position: relative;
+  -webkit-transform: rotate(0deg);
+  -moz-transform: rotate(0deg);
+  -ms-transform: rotate(0deg);
+  -o-transform: rotate(0deg);
+  transform: rotate(0deg);
+  -webkit-transition: all 0.5s;
+  -moz-transition: all 0.5s;
+  transition: all 0.5s;
+}
+.stop > div {
+  height: 10%;
+  width: 100%;
+  background: #FFFFFF;
+  border-radius: 5px;
+  position: absolute;
+  transform-origin: 0% 0%;
+  -webkit-transition: all 0.5s;
+  -moz-transition: all 0.5s;
+  transition: all 0.5s;
+}
+.stop > div.bar1, .stop > div.bar4 {
+  -webkit-transform: translate(-50%, 0) rotate(0);
+  -moz-transform: translate(-50%, 0) rotate(0);
+  -ms-transform: translate(-50%, 0) rotate(0);
+  -o-transform: translate(-50%, 0) rotate(0);
+  transform: translate(-50%, 0) rotate(0);
+  top: 0;
+  left: 50%;
+}
+.stop > div.bar2 {
+  transform-origin: 100% 0%;
+  left: -100%;
+  top: 100%;
+}
+.stop > div.bar2, .stop > div.bar3 {
+  -webkit-transform: rotate(90deg) translate(0, -100%);
+  -moz-transform: rotate(90deg) translate(0, -100%);
+  -ms-transform: rotate(90deg) translate(0, -100%);
+  -o-transform: rotate(90deg) translate(0, -100%);
+  transform: rotate(90deg) translate(0, -100%);
+}
+.stop > div.bar3 {
+  left: 100%;
+  -webkit-transform: rotate(90deg) translate(0, 0);
+  -moz-transform: rotate(90deg) translate(0, 0);
+  -ms-transform: rotate(90deg) translate(0, 0);
+  -o-transform: rotate(90deg) translate(0, 0);
+  transform: rotate(90deg) translate(0, 0);
+}
+.stop > div.bar4 {
+  top: 100%;
+  -webkit-transform: translate(0%, 0%) rotate(180deg);
+  -moz-transform: translate(0%, 0%) rotate(180deg);
+  -ms-transform: translate(0%, 0%) rotate(180deg);
+  -o-transform: translate(0%, 0%) rotate(180deg);
+  transform: translate(0%, 0%) rotate(180deg);
+  left: 100%;
+}
+.stop.stopped {
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  transform: rotate(90deg);
+  -webkit-transition: all 0.5s;
+  -moz-transition: all 0.5s;
+  transition: all 0.5s;
+}
+.stop.stopped > .bar1 {
+  -webkit-transform: translate(-40%, 0) rotate(90deg);
+  -moz-transform: translate(-40%, 0) rotate(90deg);
+  -ms-transform: translate(-40%, 0) rotate(90deg);
+  -o-transform: translate(-40%, 0) rotate(90deg);
+  transform: translate(-40%, 0) rotate(90deg);
+}
+.stop.stopped > .bar2 {
+  -webkit-transform: rotate(180deg) translate(0, 0%);
+  -moz-transform: rotate(180deg) translate(0, 0%);
+  -ms-transform: rotate(180deg) translate(0, 0%);
+  -o-transform: rotate(180deg) translate(0, 0%);
+  transform: rotate(180deg) translate(0, 0%);
+}
+.stop.stopped > .bar3 {
+  -webkit-transform: rotate(180deg) translate(0%, -100%);
+  -moz-transform: rotate(180deg) translate(0%, -100%);
+  -ms-transform: rotate(180deg) translate(0%, -100%);
+  -o-transform: rotate(180deg) translate(0%, -100%);
+  transform: rotate(180deg) translate(0%, -100%);
+}
+.stop.stopped > .bar4 {
+  -webkit-transform: translate(-10%, 0%) rotate(270deg);
+  -moz-transform: translate(-10%, 0%) rotate(270deg);
+  -ms-transform: translate(-10%, 0%) rotate(270deg);
+  -o-transform: translate(-10%, 0%) rotate(270deg);
+  transform: translate(-10%, 0%) rotate(270deg);
 }
 
 .player {
