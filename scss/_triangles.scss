@@ -1,0 +1,18 @@
+@import 'bourbon/bourbon';
+@import 'tools';
+$triangleSize: 20px;
+
+.triangle-right {
+  @include triangle($triangleSize sqrt(3)*($triangleSize/2), #FFFFFF, right);
+}
+
+.triangle-left {
+  @include triangle($triangleSize sqrt(3)*($triangleSize/2), #FFFFFF, right);
+}
+
+.triangle-left,
+.triangle-right {
+  &.inactive {
+    opacity: 0.5;
+  }
+}

@@ -1,0 +1,61 @@
+@import 'config';
+
+.playbutton {
+  position: relative;
+  height: 30px;
+  width: 30px;
+  transform: rotate(0);
+  @include transition(all $animationTimeout);
+
+  > div {
+    position: absolute;
+    background: #ffffff;
+    width: 100%;
+    height: 13%;
+    border-radius: 5px;
+    @include transition(all $animationTimeout);
+
+    &.bar1 {
+      top: 50%;
+      left: 0;
+      @include transform(translate(-40%, -50%) rotate(90deg));
+      @include transition(all $animationTimeout);
+    }
+
+    &.bar2 {
+      top: 27%;
+      width: 107.8%;
+      right: -4%;
+      @include transform(rotate(27deg) translate(0%, -50%));
+    }
+
+    &.bar3 {
+      top: 71%;
+      width: 108.8%;
+      right: -11%;
+      @include transform(rotate(-27deg) translate(0%, -50%));
+    }
+  }
+
+  &.paused {
+    transform: rotate(180deg);
+    @include transition(all $animationTimeout);
+
+    > div {
+      @include transition(all $animationTimeout);
+
+      &.bar1 {
+        left: 15%;
+        @include transition(all $animationTimeout);
+      }
+
+      &.bar2,
+      &.bar3 {
+        width: 100%;
+        right: -24%;
+        top: 40%;
+        @include transform(rotate(90deg) translate(0, 0));
+      }
+    }
+  }
+}
