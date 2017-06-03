@@ -14,7 +14,6 @@
   -webkit-transition: all 0.5s;
   -moz-transition: all 0.5s;
   transition: all 0.5s;
-  margin-left: -10%;
 }
 .mute > .waves > div {
   height: 100%;
@@ -25,7 +24,7 @@
   border: 3px solid #ffffff;
   border-radius: 50%;
   border-color: transparent #ffffff transparent transparent;
-  right: 66%;
+  right: 58%;
   transform: translateY(-50%);
   -webkit-transition: 0.5s all, 0.1s border-bottom-color;
   -moz-transition: 0.5s all, 0.1s border-bottom-color;
@@ -34,7 +33,7 @@
 .mute > .waves > div.wave2 {
   height: 150%;
   width: 150%;
-  right: 33%;
+  right: 20%;
 }
 .mute.muted .waves {
   -webkit-transform: rotate(-180deg);

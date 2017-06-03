@@ -16,7 +16,7 @@
     position: relative;
     @include transform(rotate(0deg));
     @include transition(all 0.5s);
-    margin-left: -10%;
+    // margin-left: -10%;
 
     > div {
       height: 100%;
@@ -27,14 +27,14 @@
       border: 3px solid #ffffff;
       border-radius: 50%;
       border-color: transparent #ffffff transparent transparent;
-      right: 66%;
+      right: 58%;
       transform: translateY(-50%);
       @include muteTransition;
 
       &.wave2 {
         height: 150%;
         width: 150%;
-        right: 33%;
+        right: 20%;
       }
     }
   }
