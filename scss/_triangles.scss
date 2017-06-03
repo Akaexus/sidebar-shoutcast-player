@@ -7,7 +7,7 @@ $triangleSize: 20px;
 }
 
 .triangle-left {
-  @include triangle($triangleSize sqrt(3)*($triangleSize/2), #FFFFFF, right);
+  @include triangle($triangleSize sqrt(3)*($triangleSize/2), #FFFFFF, left);
 }
 
 .triangle-left,
