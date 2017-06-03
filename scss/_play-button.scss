@@ -1,6 +1,9 @@
 @import 'config';
-
+.playcontainer {
+  width: 60px;
+}
 .playbutton {
+  margin: 0 auto;
   position: relative;
   height: 30px;
   width: 30px;

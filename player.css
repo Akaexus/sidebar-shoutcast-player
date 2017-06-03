@@ -95,7 +95,12 @@
   transform: rotate(-45deg);
 }
 
+.playcontainer {
+  width: 60px;
+}
+
 .playbutton {
+  margin: 0 auto;
   position: relative;
   height: 30px;
   width: 30px;
@@ -174,9 +179,14 @@
   transform: rotate(90deg) translate(0, 0);
 }
 
+.stopcontainer {
+  width: 60px;
+}
+
 .stop {
   height: 30px;
   width: 30px;
+  margin: 0 auto;
   position: relative;
   -webkit-transform: rotate(0deg);
   -moz-transform: rotate(0deg);

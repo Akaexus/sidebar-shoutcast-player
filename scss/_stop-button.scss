@@ -1,8 +1,14 @@
 @import 'bourbon/bourbon';
 @import 'config';
+
+.stopcontainer {
+  width: 60px;
+}
+
 .stop {
   height: 30px;
   width: 30px;
+  margin: 0 auto;
   position: relative;
   @include transform(rotate(0deg));
   @include transition(all 0.5s);
