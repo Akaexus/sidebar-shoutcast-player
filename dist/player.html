@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="js/player.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="player.css">
+     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&amp;subset=latin-ext" rel="stylesheet">
+    <title>Document</title>
+    <style media="screen">
+      #container {
+        width: 270px;
+        padding: 10px 0;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      body, html {
+        margin: 0;
+        padding: 0;
+        background: #F9F9F9;
+        font-family: sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <ul style="font-size: 12px; margin: 0;">
+      <li>XNaprawić wyśrodkowanie mute buttona</li>
+      <li>Xdodać przewijanie utworów</li>
+      <li>dodać zmiane głośności</li>
+      <li>audio spectrum</li>
+      <li>napisać cały js</li>
+    </ul>
+    <div id="container">
+      <div class="player">
+        <div class="background-cover"></div>
+        <div class="info">
+          <div class="cover">
+            <div class="triangle triangle-left"></div>
+            <div class="image"></div>
+            <div class="triangle triangle-right"></div>
+          </div>
+          <div class="meta">
+            <div class="title">Tytuł utworu</div>
+            <div class="artist">Wykonawca</div>
+            <div class="streamname">Nazwa streama lorem ipsum.</div>
+            <div class="streamer">Nazwa streamera</div>
+          </div>
+          <div class="controls">
+            <div class="stopcontainer">
+              <div class="stop" onclick="this.classList.toggle('stopped')">
+                <div class="bar1"></div>
+                <div class="bar2"></div>
+                <div class="bar3"></div>
+                <div class="bar4"></div>
+              </div>
+            </div>
+            <div class="playcontainer">
+              <div class="playbutton" onclick="this.classList.toggle('paused')">
+                <div class="bar1"></div>
+                <div class="bar2"></div>
+                <div class="bar3"></div>
+              </div>
+            </div>
+            <div class="mute" onclick="this.classList.toggle('muted')">
+              <img src="imgs/volume-off.svg" alt=""><div class="waves"><div class="wave1"></div><div class="wave2"></div>
+              </div>
+            </div>
+          </div>
+          <div class="stats">
+            Słucha nas 21/37 osób!<br>
+            Mrucznik Role Play
+          </div>
+          <audio id="player-audio" >
+            <source src="http://4stream.pl:18240/;stream.mp3" type="audio/mp3">
+          </audio>
+        </div>
+      </div>
+    </div>
+    <!-- <audio controls autoplay="autoplay"><source src="http://4stream.pl:18240/;stream.mp3?sid=1" type="audio/mp3"> -->
+  </body>
+</html>

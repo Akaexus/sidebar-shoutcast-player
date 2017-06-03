@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <script src="player.js" charset="utf-8"></script>
-    <script src="jsonp.js" charset="utf-8"></script>
+    <script src="js/player.js" charset="utf-8"></script>
     <link rel="stylesheet" href="player.css">
      <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&amp;subset=latin-ext" rel="stylesheet">
     <title>Document</title>
@@ -35,13 +34,6 @@
       <li>audio spectrum</li>
       <li>napisać cały js</li>
     </ul>
-    <!-- <script type="text/javascript">
-      console.log(escapeHTML('<div>witam</div>'));
-      var shoutcast = new Shoutcast('http://s7.radioparty.pl:8000', null);
-      shoutcast.fetchPlayed(function(data) {
-        console.log(data);
-      });
-    </script> -->
     <div id="container">
       <div class="player">
         <div class="background-cover"></div>
@@ -82,6 +74,9 @@
             Słucha nas 21/37 osób!<br>
             Mrucznik Role Play
           </div>
+          <audio id="player-audio" >
+            <source src="http://4stream.pl:18240/;stream.mp3" type="audio/mp3">
+          </audio>
         </div>
       </div>
     </div>
