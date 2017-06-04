@@ -4,6 +4,12 @@
   border-bottom: 10px solid transparent;
   border-left: 17.32051px solid rgba(255, 255, 255, 0.8);
   border-top: 10px solid transparent; }
+  .triangle-right.disabled {
+    height: 0;
+    width: 0;
+    border-bottom: 10px solid transparent;
+    border-left: 17.32051px solid rgba(255, 255, 255, 0.3);
+    border-top: 10px solid transparent; }
 
 .triangle-left {
   height: 0;
@@ -11,6 +17,12 @@
   border-bottom: 10px solid transparent;
   border-right: 17.32051px solid rgba(255, 255, 255, 0.8);
   border-top: 10px solid transparent; }
+  .triangle-left.disabled {
+    height: 0;
+    width: 0;
+    border-bottom: 10px solid transparent;
+    border-right: 17.32051px solid rgba(255, 255, 255, 0.3);
+    border-top: 10px solid transparent; }
 
 .triangle-left.inactive,
 .triangle-right.inactive {
@@ -262,7 +274,7 @@
   .player > .background-cover {
     -webkit-filter: blur(5px);
     filter: blur(5px);
-    background: #323232 url("http://i.imgur.com/Ez8LfSZ.jpg") no-repeat 50% 50%/auto 110%;
+    background: #323232 url("http://i.imgur.com/NpYCAVP.png") no-repeat 50% 50%/auto 110%;
     height: 100%;
     position: absolute;
     width: 100%; }
@@ -286,7 +298,7 @@
         .player > .info > .cover > .triangle.triangle-right {
           left: 90%; }
       .player > .info > .cover > .image {
-        background: #323232 url("http://i.imgur.com/Ez8LfSZ.jpg") no-repeat 50% 50%/cover;
+        background: #323232 url("http://i.imgur.com/NpYCAVP.png") no-repeat 50% 50%/cover;
         width: 60%;
         position: absolute;
         padding-bottom: 60%;
@@ -299,7 +311,7 @@
         transform: translate(-50%, -50%); }
     .player > .info > .meta {
       text-align: center; }
-      .player > .info > .meta > .title {
+      .player > .info > .meta > .songtitle {
         font-weight: 600;
         font-size: 14px; }
       .player > .info > .meta > .artist, .player > .info > .meta > .streamer {

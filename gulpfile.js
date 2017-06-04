@@ -39,7 +39,7 @@ gulp.task('clean:dist', function() {
 })
 
 gulp.task('webpack', function() {
-  return gulp.src('app/js/player.js')
+  return gulp.src('app/js/*.js')
     .pipe(size())
     .pipe(jshint('.jshintrc'))
     .pipe(jshint.reporter('jshint-stylish'))

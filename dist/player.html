@@ -35,7 +35,7 @@
       <li>napisać cały js</li>
     </ul>
     <div id="container">
-      <div class="player">
+      <div class="player" id="player">
         <div class="background-cover"></div>
         <div class="info">
           <div class="cover">
@@ -44,14 +44,14 @@
             <div class="triangle triangle-right"></div>
           </div>
           <div class="meta">
-            <div class="title">Tytuł utworu</div>
-            <div class="artist">Wykonawca</div>
-            <div class="streamname">Nazwa streama lorem ipsum.</div>
-            <div class="streamer">Nazwa streamera</div>
+            <div class="songtitle"></div>
+            <div class="artist"></div>
+            <div class="streamname"></div>
+            <div class="streamer"></div>
           </div>
           <div class="controls">
             <div class="stopcontainer">
-              <div class="stop" onclick="this.classList.toggle('stopped')">
+              <div class="stop">
                 <div class="bar1"></div>
                 <div class="bar2"></div>
                 <div class="bar3"></div>
@@ -59,24 +59,21 @@
               </div>
             </div>
             <div class="playcontainer">
-              <div class="playbutton" onclick="this.classList.toggle('paused')">
+              <div class="playbutton">
                 <div class="bar1"></div>
                 <div class="bar2"></div>
                 <div class="bar3"></div>
               </div>
             </div>
-            <div class="mute" onclick="this.classList.toggle('muted')">
+            <div class="mute">
               <img src="imgs/volume-off.svg" alt=""><div class="waves"><div class="wave1"></div><div class="wave2"></div>
               </div>
             </div>
           </div>
           <div class="stats">
-            Słucha nas 21/37 osób!<br>
+            Słucha nas <span class="listeners">?</span>/<span class="maxlisteners">?</span> osób!<br>
             Mrucznik Role Play
           </div>
-          <audio id="player-audio" >
-            <source src="http://4stream.pl:18240/;stream.mp3" type="audio/mp3">
-          </audio>
         </div>
       </div>
     </div>

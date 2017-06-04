@@ -4,10 +4,16 @@ $triangleSize: 20px;
 
 .triangle-right {
   @include triangle($triangleSize sqrt(3)*($triangleSize/2), rgba(255, 255, 255, 0.8), right);
+  &.disabled {
+    @include triangle($triangleSize sqrt(3)*($triangleSize/2), rgba(255, 255, 255, 0.3), right);
+  }
 }
 
 .triangle-left {
   @include triangle($triangleSize sqrt(3)*($triangleSize/2), rgba(255, 255, 255, 0.8), left);
+  &.disabled {
+    @include triangle($triangleSize sqrt(3)*($triangleSize/2), rgba(255, 255, 255, 0.3), left);
+  }
 }
 
 .triangle-left,
