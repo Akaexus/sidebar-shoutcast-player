@@ -7,7 +7,8 @@ var gulp = require('gulp'),
     htmlValidator = require('gulp-html'),
     runSequence = require('run-sequence'),
     del = require('del'),
-    size = require('gulp-size');
+    size = require('gulp-size'),
+    jshint = require('gulp-jshint');
 
 gulp.task('sass', function() {
   return gulp.src('app/scss/**/*.scss')
@@ -40,6 +41,8 @@ gulp.task('clean:dist', function() {
 gulp.task('webpack', function() {
   return gulp.src('app/js/player.js')
     .pipe(size())
+    .pipe(jshint('.jshintrc'))
+    .pipe(jshint.reporter('jshint-stylish'))
     .pipe(webpack(require('./webpack.config.js')))
     .pipe(uglify())
     .pipe(size())
