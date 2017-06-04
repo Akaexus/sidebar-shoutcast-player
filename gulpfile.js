@@ -6,17 +6,22 @@ var gulp = require('gulp'),
     cache = require('gulp-cache'),
     htmlValidator = require('gulp-html'),
     runSequence = require('run-sequence'),
-    del = require('del');
+    del = require('del'),
+    size = require('gulp-size');
 
 gulp.task('sass', function() {
   return gulp.src('app/scss/**/*.scss')
+    .pipe(size())
     .pipe(sass())
+    .pipe(size())
     .pipe(gulp.dest('dist/'))
 });
 
 gulp.task('images', function() {
   return gulp.src('app/imgs/**/*.+(png|jpg|gif|svg)')
+    .pipe(size())
     .pipe(cache(imagemin()))
+    .pipe(size())
     .pipe(gulp.dest('dist/imgs'));
 });
 
@@ -34,8 +39,10 @@ gulp.task('clean:dist', function() {
 
 gulp.task('webpack', function() {
   return gulp.src('app/js/player.js')
-    // .pipe(webpack(require('./webpack.config.js')))
-    // .pipe(uglify())
+    .pipe(size())
+    .pipe(webpack(require('./webpack.config.js')))
+    .pipe(uglify())
+    .pipe(size())
     .pipe(gulp.dest('dist/js'))
 });
 
