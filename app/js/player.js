@@ -75,6 +75,7 @@ function Player(url, element) {
     }
   }
   this.setCover = function(nth) {
+    this.currentCover = nth;
     if(this.history[0].fetched) {
       if(nth === 0) {
         this.dom.nextCoverButton.classList.add('disabled');
@@ -119,7 +120,6 @@ function Player(url, element) {
   this.dom.prevCoverButton.addEventListener('click', this.prevCover.bind(this));
   document.addEventListener('statsFetched', function(event) {
     if(!event.detail.error) {
-      console.log(this.dom);
       this.dom.streamname.textContent = event.detail.response.servertitle;
       this.dom.streamer.textContent = event.detail.response.servergenre;
       this.dom.listeners.textContent = event.detail.response.currentlisteners;
@@ -147,6 +147,7 @@ function Player(url, element) {
           }
           self.historyCount++;
           if(self.historyCount === self.history.length) {
+            self.historyCount = 0;
             self.setCover(0);
           }
         }
