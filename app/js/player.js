@@ -48,7 +48,11 @@ function Player(url, element) {
       this.stream.mute();
     }
     this.mutedState = !this.mutedState;
-    this.updateControls();
+    if(this.mutedState) {
+      this.muteButton.classList.add('muted');
+    } else {
+      this.muteButton.classList.remove('muted');
+    }
   }
 
   this.stop = function()  {
@@ -67,11 +71,6 @@ function Player(url, element) {
     } else if(this.state === 'stopped') {
       this.playButton.classList.remove('paused');
       this.stopButton.classList.toggle('stopped');
-    }
-    if(this.mutedState) {
-      this.muteButton.classList.add('muted');
-    } else {
-      this.muteButton.classList.remove('muted');
     }
   }
   this.setCover = function(nth) {
