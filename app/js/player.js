@@ -22,7 +22,8 @@ function Player(url, element) {
     prevCoverButton: '.info > .cover > .triangle.triangle-left',
     nextCoverButton: '.info > .cover > .triangle.triangle-right',
     listeners: '.info > .stats > .listeners',
-    maxlisteners: '.info > .stats > .maxlisteners'
+    maxlisteners: '.info > .stats > .maxlisteners',
+    volume: '.info > .volume > input[type=range]'
   };
   for(var key in this.dom) {
     this.dom[key] = document.querySelector(this.dom[key]);
@@ -112,9 +113,13 @@ function Player(url, element) {
     }
     return this.currentCover;
   }
+  this.updateVolume = function(event) {
+    this.stream.setVolume(event.target.value);
+  }
   this.playButton.addEventListener('click', this.play.bind(this));
   this.muteButton.addEventListener('click', this.mute.bind(this));
   this.stopButton.addEventListener('click', this.stop.bind(this));
+  this.dom.volume.addEventListener('input', this.updateVolume.bind(this));
   this.dom.nextCoverButton.addEventListener('click', this.nextCover.bind(this));
   this.dom.prevCoverButton.addEventListener('click', this.prevCover.bind(this));
   document.addEventListener('statsFetched', function(event) {

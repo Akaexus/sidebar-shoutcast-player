@@ -28,75 +28,75 @@
 .triangle-right.inactive {
   opacity: 0.5; }
 
-.mute > * {
-  display: inline-block;
+.mutecontainer {
   position: relative; }
-
-.mute > .waves {
-  width: 30px;
-  padding-top: 50%;
-  position: relative;
-  -webkit-transform: rotate(0deg);
-  -moz-transform: rotate(0deg);
-  -ms-transform: rotate(0deg);
-  -o-transform: rotate(0deg);
-  transform: rotate(0deg);
-  -webkit-transition: all 0.5s;
-  -moz-transition: all 0.5s;
-  transition: all 0.5s; }
-  .mute > .waves > div {
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    box-sizing: border-box;
-    top: 50%;
-    border: 3px solid #ffffff;
-    border-radius: 50%;
-    border-color: transparent #ffffff transparent transparent;
-    right: 58%;
-    transform: translateY(-50%);
-    -webkit-transition: 0.5s all, 0.1s border-bottom-color;
-    -moz-transition: 0.5s all, 0.1s border-bottom-color;
-    transition: 0.5s all, 0.1s border-bottom-color; }
-    .mute > .waves > div.wave2 {
-      height: 150%;
-      width: 150%;
-      right: 20%; }
-
-.mute.muted .waves {
-  -webkit-transform: rotate(-180deg);
-  -moz-transform: rotate(-180deg);
-  -ms-transform: rotate(-180deg);
-  -o-transform: rotate(-180deg);
-  transform: rotate(-180deg);
-  -webkit-transition: all 0.5s;
-  -moz-transition: all 0.5s;
-  transition: all 0.5s; }
-  .mute.muted .waves > div {
-    border-radius: 0;
-    width: 50%;
-    height: 50%;
-    -webkit-transform: rotate(45deg);
-    -moz-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    -o-transform: rotate(45deg);
-    transform: rotate(45deg);
-    -webkit-transition: 0.5s all, 0.1s border-bottom-color;
-    -moz-transition: 0.5s all, 0.1s border-bottom-color;
-    transition: 0.5s all, 0.1s border-bottom-color; }
-    .mute.muted .waves > div.wave1 {
-      border-bottom-color: #FFFFFF;
-      top: -1%;
-      right: 22%; }
-    .mute.muted .waves > div.wave2 {
-      border-top-color: #ffffff;
-      top: 55%;
-      right: 21%;
-      -webkit-transform: rotate(-45deg);
-      -moz-transform: rotate(-45deg);
-      -ms-transform: rotate(-45deg);
-      -o-transform: rotate(-45deg);
-      transform: rotate(-45deg); }
+  .mutecontainer .mute > * {
+    display: inline-block;
+    position: relative; }
+  .mutecontainer .mute > .waves {
+    width: 30px;
+    padding-top: 50%;
+    position: relative;
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    transition: all 0.5s; }
+    .mutecontainer .mute > .waves > div {
+      height: 100%;
+      width: 100%;
+      position: absolute;
+      box-sizing: border-box;
+      top: 50%;
+      border: 3px solid #ffffff;
+      border-radius: 50%;
+      border-color: transparent #ffffff transparent transparent;
+      right: 58%;
+      transform: translateY(-50%);
+      -webkit-transition: 0.5s all, 0.1s border-bottom-color;
+      -moz-transition: 0.5s all, 0.1s border-bottom-color;
+      transition: 0.5s all, 0.1s border-bottom-color; }
+      .mutecontainer .mute > .waves > div.wave2 {
+        height: 150%;
+        width: 150%;
+        right: 20%; }
+  .mutecontainer .mute.muted .waves {
+    -webkit-transform: rotate(-180deg);
+    -moz-transform: rotate(-180deg);
+    -ms-transform: rotate(-180deg);
+    -o-transform: rotate(-180deg);
+    transform: rotate(-180deg);
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    transition: all 0.5s; }
+    .mutecontainer .mute.muted .waves > div {
+      border-radius: 0;
+      width: 50%;
+      height: 50%;
+      -webkit-transform: rotate(45deg);
+      -moz-transform: rotate(45deg);
+      -ms-transform: rotate(45deg);
+      -o-transform: rotate(45deg);
+      transform: rotate(45deg);
+      -webkit-transition: 0.5s all, 0.1s border-bottom-color;
+      -moz-transition: 0.5s all, 0.1s border-bottom-color;
+      transition: 0.5s all, 0.1s border-bottom-color; }
+      .mutecontainer .mute.muted .waves > div.wave1 {
+        border-bottom-color: #FFFFFF;
+        top: -1%;
+        right: 22%; }
+      .mutecontainer .mute.muted .waves > div.wave2 {
+        border-top-color: #ffffff;
+        top: 55%;
+        right: 21%;
+        -webkit-transform: rotate(-45deg);
+        -moz-transform: rotate(-45deg);
+        -ms-transform: rotate(-45deg);
+        -o-transform: rotate(-45deg);
+        transform: rotate(-45deg); }
 
 .playcontainer {
   width: 60px; }
@@ -264,6 +264,89 @@
       -ms-transform: translate(-10%, 0%) rotate(270deg);
       -o-transform: translate(-10%, 0%) rotate(270deg);
       transform: translate(-10%, 0%) rotate(270deg); }
+
+.volume {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 5px;
+  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center; }
+  .volume > img {
+    width: 6%;
+    opacity: 0.6; }
+  .volume > input {
+    margin: 0;
+    width: 80%;
+    -webkit-appearance: none;
+    background: transparent;
+    -webkit-appearance: none; }
+    .volume > input:focus {
+      outline: 0; }
+      .volume > input:focus::-webkit-slider-runnable-track {
+        background: #a2a4a6; }
+      .volume > input:focus::-ms-fill-lower {
+        background: #959799; }
+      .volume > input:focus::-ms-fill-upper {
+        background: #a2a4a6; }
+    .volume > input::-webkit-slider-runnable-track {
+      cursor: pointer;
+      height: 3px;
+      transition: all .2s ease;
+      width: 100%;
+      background: #959799;
+      border: 0 solid #cfd8dc;
+      border-radius: 5px; }
+    .volume > input::-webkit-slider-thumb {
+      background: #FFFFFF;
+      border: 2px solid #eceff1;
+      border-radius: 100%;
+      cursor: pointer;
+      height: 12px;
+      width: 12px;
+      -webkit-appearance: none;
+      margin-top: -4.5px; }
+    .volume > input::-moz-range-track {
+      cursor: pointer;
+      height: 3px;
+      transition: all .2s ease;
+      width: 100%;
+      background: #959799;
+      border: 0 solid #cfd8dc;
+      border-radius: 5px; }
+    .volume > input::-moz-range-thumb {
+      background: #FFFFFF;
+      border: 2px solid #eceff1;
+      border-radius: 100%;
+      cursor: pointer;
+      height: 12px;
+      width: 12px; }
+    .volume > input::-ms-track {
+      cursor: pointer;
+      height: 3px;
+      transition: all .2s ease;
+      width: 100%;
+      background: transparent;
+      border-color: transparent;
+      border-width: 6px 0;
+      color: transparent; }
+    .volume > input::-ms-fill-lower {
+      background: #888a8c;
+      border: 0 solid #cfd8dc;
+      border-radius: 10px; }
+    .volume > input::-ms-fill-upper {
+      background: #959799;
+      border: 0 solid #cfd8dc;
+      border-radius: 10px; }
+    .volume > input::-ms-thumb {
+      background: #FFFFFF;
+      border: 2px solid #eceff1;
+      border-radius: 100%;
+      cursor: pointer;
+      height: 12px;
+      width: 12px;
+      margin-top: 0; }
 
 .player {
   background: #323232;

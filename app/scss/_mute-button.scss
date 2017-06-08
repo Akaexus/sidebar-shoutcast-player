@@ -4,64 +4,68 @@
    @include transition($animationTimeout all, 0.1s border-bottom-color);
 }
 
-.mute {
-  > * {
-    display: inline-block;
-    position: relative;
-  }
 
-  > .waves {
-    width: 30px;
-    padding-top: 50%;
-    position: relative;
-    @include transform(rotate(0deg));
-    @include transition(all 0.5s);
-    // margin-left: -10%;
 
-    > div {
-      height: 100%;
-      width: 100%;
-      position: absolute;
-      box-sizing: border-box;
-      top: 50%;
-      border: 3px solid #ffffff;
-      border-radius: 50%;
-      border-color: transparent #ffffff transparent transparent;
-      right: 58%;
-      transform: translateY(-50%);
-      @include muteTransition;
-
-      &.wave2 {
-        height: 150%;
-        width: 150%;
-        right: 20%;
-      }
+.mutecontainer {
+  position: relative;
+  .mute {
+    > * {
+      display: inline-block;
+      position: relative;
     }
-  }
-
-  &.muted {
-    .waves {
-      @include transform(rotate(-180deg));
+    > .waves {
+      width: 30px;
+      padding-top: 50%;
+      position: relative;
+      @include transform(rotate(0deg));
       @include transition(all 0.5s);
+      // margin-left: -10%;
 
       > div {
-        border-radius: 0;
-        width: 50%;
-        height: 50%;
-        @include transform(rotate(45deg));
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        box-sizing: border-box;
+        top: 50%;
+        border: 3px solid #ffffff;
+        border-radius: 50%;
+        border-color: transparent #ffffff transparent transparent;
+        right: 58%;
+        transform: translateY(-50%);
         @include muteTransition;
 
-        &.wave1 {
-          border-bottom-color: #FFFFFF;
-          top: -1%;
-          right: 22%;
-        }
-
         &.wave2 {
-          border-top-color: #ffffff;
-          top: 55%;
-          right: 21%;
-          @include transform(rotate(-45deg));
+          height: 150%;
+          width: 150%;
+          right: 20%;
+        }
+      }
+    }
+
+    &.muted {
+      .waves {
+        @include transform(rotate(-180deg));
+        @include transition(all 0.5s);
+
+        > div {
+          border-radius: 0;
+          width: 50%;
+          height: 50%;
+          @include transform(rotate(45deg));
+          @include muteTransition;
+
+          &.wave1 {
+            border-bottom-color: #FFFFFF;
+            top: -1%;
+            right: 22%;
+          }
+
+          &.wave2 {
+            border-top-color: #ffffff;
+            top: 55%;
+            right: 21%;
+            @include transform(rotate(-45deg));
+          }
         }
       }
     }

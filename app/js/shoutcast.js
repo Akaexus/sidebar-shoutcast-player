@@ -96,4 +96,12 @@ module.exports = function(url, options) {
   this.unmute = function() {
     this.audio.muted = false;
   }
+  this.setVolume = function(level) {
+    if(level>=0 && level<=1) {
+      this.audio.volume = level;
+      return true;
+    } else {
+      return false;
+    }
+  }
 }
