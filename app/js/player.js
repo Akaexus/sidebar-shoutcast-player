@@ -161,9 +161,7 @@ function Player(url, element) {
   document.addEventListener('historyFetched', function(event) {
     var self = this;
     this.mergeHistory(event.detail.response);
-    console.log(this.history);
     this.history.map(function(song) {
-      console.log(song, !song.hasOwnProperty('fetched')?'fetching':'not fetching');
         if(!song.hasOwnProperty('fetched')) {
           this.historyUnfetched++;
         var xhr = new XMLHttpRequest();
@@ -186,7 +184,6 @@ function Player(url, element) {
               self.historyUnfetched = 0;
               self.historyFetched = 0;
               self.setCover(0);
-              console.log(self.history);
             }
           }
         });
