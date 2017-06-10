@@ -3,6 +3,7 @@
 @import 'mute-button';
 @import 'play-button';
 @import 'stop-button';
+@import 'volume';
 
 .player {
   background: #323232;
@@ -12,7 +13,7 @@
   position: relative;
   >.background-cover {
     @include filter(blur(5px));
-    background: #323232 url('http://i.imgur.com/Ez8LfSZ.jpg') no-repeat 50% 50% / auto 110%;
+    background: #323232 url($defaultCover) no-repeat 50% 50% / auto 110%;
     height: 100%;
     position: absolute;
     width: 100%;
@@ -39,7 +40,7 @@
         }
       }
       > .image {
-        background: #323232 url('http://i.imgur.com/Ez8LfSZ.jpg') no-repeat 50% 50% / cover;
+        background: #323232 url($defaultCover) no-repeat 50% 50% / cover;
         width: 60%;
         position: absolute;
         padding-bottom: 60%;
@@ -50,7 +51,7 @@
     }
     >.meta {
       text-align: center;
-      >.title {
+      >.songtitle {
         font-weight: 600;
         font-size: 14px;
       }

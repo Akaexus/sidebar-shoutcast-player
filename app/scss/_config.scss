@@ -1,0 +1,26 @@
+$animationTimeout: 0.5s;
+$instantTimeout: 0.0001s;
+$defaultCover: 'http://i.imgur.com/NpYCAVP.png';
+
+//range
+$track-color: #959799;
+$thumb-color: #FFFFFF;
+
+$thumb-radius: 100%;
+$thumb-height: 12px;
+$thumb-width: $thumb-height;
+$thumb-shadow-blur: 0;
+$thumb-shadow-color: transparent;
+$thumb-border-width: 2px;
+$thumb-border-color: #eceff1;
+
+$track-width: 100%;
+$track-height: 3px;
+$track-shadow-size: 0;
+$track-shadow-blur: 0;
+$track-shadow-color: rgba(0, 0, 0, .2);
+$track-border-width: 0;
+$track-border-color: #cfd8dc;
+
+$track-radius: 5px;
+$contrast: 5%;

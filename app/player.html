@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <script src="player.js" charset="utf-8"></script>
-    <script src="jsonp.js" charset="utf-8"></script>
+    <script src="js/player.js" charset="utf-8"></script>
     <link rel="stylesheet" href="player.css">
      <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&amp;subset=latin-ext" rel="stylesheet">
     <title>Document</title>
@@ -35,15 +34,8 @@
       <li>audio spectrum</li>
       <li>napisać cały js</li>
     </ul>
-    <!-- <script type="text/javascript">
-      console.log(escapeHTML('<div>witam</div>'));
-      var shoutcast = new Shoutcast('http://s7.radioparty.pl:8000', null);
-      shoutcast.fetchPlayed(function(data) {
-        console.log(data);
-      });
-    </script> -->
     <div id="container">
-      <div class="player">
+      <div class="player" id="player">
         <div class="background-cover"></div>
         <div class="info">
           <div class="cover">
@@ -52,14 +44,14 @@
             <div class="triangle triangle-right"></div>
           </div>
           <div class="meta">
-            <div class="title">Tytuł utworu</div>
-            <div class="artist">Wykonawca</div>
-            <div class="streamname">Nazwa streama lorem ipsum.</div>
-            <div class="streamer">Nazwa streamera</div>
+            <div class="songtitle"></div>
+            <div class="artist"></div>
+            <div class="streamname"></div>
+            <div class="streamer"></div>
           </div>
           <div class="controls">
             <div class="stopcontainer">
-              <div class="stop" onclick="this.classList.toggle('stopped')">
+              <div class="stop">
                 <div class="bar1"></div>
                 <div class="bar2"></div>
                 <div class="bar3"></div>
@@ -67,19 +59,25 @@
               </div>
             </div>
             <div class="playcontainer">
-              <div class="playbutton" onclick="this.classList.toggle('paused')">
+              <div class="playbutton">
                 <div class="bar1"></div>
                 <div class="bar2"></div>
                 <div class="bar3"></div>
               </div>
             </div>
-            <div class="mute" onclick="this.classList.toggle('muted')">
-              <img src="imgs/volume-off.svg" alt=""><div class="waves"><div class="wave1"></div><div class="wave2"></div>
+            <div class="mutecontainer">
+              <div class="mute">
+                <img src="imgs/volume-off.svg" alt=""><div class="waves"><div class="wave1"></div><div class="wave2"></div></div>
               </div>
             </div>
           </div>
+          <div class="volume">
+            <img src="imgs/volume-down.svg" alt="volume-down">
+            <input type="range" value="1" min="0" max="1" step="0.01">
+            <img src="imgs/volume-up.svg" alt="volume-up">
+          </div>
           <div class="stats">
-            Słucha nas 21/37 osób!<br>
+            Słucha nas <span class="listeners">?</span>/<span class="maxlisteners">?</span> osób!<br>
             Mrucznik Role Play
           </div>
         </div>
