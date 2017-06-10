@@ -47,10 +47,18 @@
 	'use strict';
 	var Shoutcast = __webpack_require__(1);
 
-	function Player(url, element) {
-	  this.unknownCover = 'http://i.imgur.com/NpYCAVP.png';
-
-	  this.stream =  new Shoutcast(url);
+	function Player(url, element, options) {
+	  this.options = options || {};
+	  var defaultOptions = {
+	    historySize: 50,
+	    unknownCover: 'http://i.imgur.com/NpYCAVP.png'
+	  };
+	  for(var property in defaultOptions) {
+	    if(defaultOptions.hasOwnProperty(property) && !this.options.hasOwnProperty(property)) {
+	      this.options[property] = defaultOptions[property];
+	    }
+	  }
+	  this.stream =  new Shoutcast(url, options);
 	  this.player = element;
 	  this.currentCover = 0;
 	  this.historyFetched = 0;
@@ -140,7 +148,7 @@
 	        this.dom.songtitle.textContent = this.history[nth].fetched.trackName;
 	        this.dom.artist.textContent = this.history[nth].fetched.artist;
 	      } else {
-	        coverUrl = this.unknownCover;
+	        coverUrl = this.options.unknownCover;
 	        this.dom.songtitle.textContent = this.history[nth].title.split(' - ')[0];
 	        this.dom.artist.textContent = this.history[nth].title.split(' - ')[1] || ' ';
 	      }
@@ -207,9 +215,7 @@
 	  document.addEventListener('historyFetched', function(event) {
 	    var self = this;
 	    this.mergeHistory(event.detail.response);
-	    console.log(this.history);
 	    this.history.map(function(song) {
-	      console.log(song, !song.hasOwnProperty('fetched')?'fetching':'not fetching');
 	        if(!song.hasOwnProperty('fetched')) {
 	          this.historyUnfetched++;
 	        var xhr = new XMLHttpRequest();
@@ -232,7 +238,6 @@
 	              self.historyUnfetched = 0;
 	              self.historyFetched = 0;
 	              self.setCover(0);
-	              console.log(self.history);
 	            }
 	          }
 	        });
@@ -269,7 +274,13 @@
 	}
 	module.exports = function(url, options) {
 	  this.url = url;
-	  this.options = options || {historyTimeout: 45000, statsTimeout: 20000, path: {history: '/played', stats: '/stats'}, streamID: 1};
+	  this.options = options || {};
+	  var defaultOptions = {historyTimeout: 80000, statsTimeout: 40000, path: {history: '/played', stats: '/stats'}, streamID: 1};
+	  for(var property in defaultOptions) {
+	    if(defaultOptions.hasOwnProperty(property) && !this.options.hasOwnProperty(property)) {
+	      this.options[property] = defaultOptions[property];
+	    }
+	  }
 
 	  this.audio = new Audio(url+'/;');
 

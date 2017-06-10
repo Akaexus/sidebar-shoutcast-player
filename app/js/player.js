@@ -1,10 +1,18 @@
 'use strict';
 var Shoutcast = require('./shoutcast.js');
 
-function Player(url, element) {
-  this.unknownCover = 'http://i.imgur.com/NpYCAVP.png';
-
-  this.stream =  new Shoutcast(url);
+function Player(url, element, options) {
+  this.options = options || {};
+  var defaultOptions = {
+    historySize: 50,
+    unknownCover: 'http://i.imgur.com/NpYCAVP.png'
+  };
+  for(var property in defaultOptions) {
+    if(defaultOptions.hasOwnProperty(property) && !this.options.hasOwnProperty(property)) {
+      this.options[property] = defaultOptions[property];
+    }
+  }
+  this.stream =  new Shoutcast(url, options);
   this.player = element;
   this.currentCover = 0;
   this.historyFetched = 0;
@@ -94,7 +102,7 @@ function Player(url, element) {
         this.dom.songtitle.textContent = this.history[nth].fetched.trackName;
         this.dom.artist.textContent = this.history[nth].fetched.artist;
       } else {
-        coverUrl = this.unknownCover;
+        coverUrl = this.options.unknownCover;
         this.dom.songtitle.textContent = this.history[nth].title.split(' - ')[0];
         this.dom.artist.textContent = this.history[nth].title.split(' - ')[1] || ' ';
       }
