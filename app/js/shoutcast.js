@@ -20,7 +20,7 @@ module.exports = function(url, options) {
 
   this.audio = new Audio(url+'/;');
 
-  this.statsFetchedEvent = new CustomEvent('statsFetched', {detail: null}),
+  this.statsFetchedEvent = new CustomEvent('statsFetched', {detail: null});
   this.historyFetchedEvent = new CustomEvent('historyFetched', {detail: null});
 
   this.statsInterval = null;
@@ -28,7 +28,7 @@ module.exports = function(url, options) {
 
   this.mute = function () {
     this.audio.mute=!this.audio.mute;
-  }
+  };
   this.fetchStats = function() {
     jsonp({
       url: this.url+this.options.path.stats+'?json=1&sid='+this.options.streamID,
@@ -46,7 +46,7 @@ module.exports = function(url, options) {
         document.dispatchEvent(this.historyFetchedEvent);
       }
     });
-  }
+  };
   this.fetchHistory = function() {
     jsonp({
       url: this.url+this.options.path.history+'?type=json',
@@ -64,7 +64,7 @@ module.exports = function(url, options) {
         document.dispatchEvent(this.historyFetchedEvent);
       }
     });
-  }
+  };
   this.fetch = function(statsCallback, historyCallback) {
     this.fetchHistory(historyCallback);
     this.fetchStats(statsCallback);
@@ -77,25 +77,25 @@ module.exports = function(url, options) {
       function() {
         this.fetchHistory(historyCallback);
       }.bind(this), this.options.historyTimeout);
-  }
+  };
   this.stopFetching = function() {
     clearInterval(this.statsInterval);
     clearInterval(this.historyInterval);
-  }
+  };
   this.play = function() {
     this.audio.play();
     this.fetch(this.statsCallback, this.historyCallback);
-  }
+  };
   this.pause = function() {
     this.audio.pause();
     this.stopFetching();
-  }
+  };
   this.mute = function() {
     this.audio.muted = true;
-  }
+  };
   this.unmute = function() {
     this.audio.muted = false;
-  }
+  };
   this.setVolume = function(level) {
     if(level>=0 && level<=1) {
       this.audio.volume = level;
@@ -103,5 +103,5 @@ module.exports = function(url, options) {
     } else {
       return false;
     }
-  }
-}
+  };
+};
