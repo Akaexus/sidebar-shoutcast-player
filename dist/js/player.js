@@ -1,1 +1,542 @@
-!function(t){function e(i){if(s[i])return s[i].exports;var n=s[i]={exports:{},id:i,loaded:!1};return t[i].call(n.exports,n,n.exports,e),n.loaded=!0,n.exports}var s={};e.m=t,e.c=s,e.p="",e(0)}([function(t,e,s){"use strict";function i(t,e){this.unknownCover="http://i.imgur.com/NpYCAVP.png",this.stream=new n(t),this.player=e,this.currentCover=0,this.historyCount=0,this.history=null,this.state="paused",this.mutedState=!1,this.dom={cover:".cover > .image",backgroundCover:".background-cover",artist:".artist",streamname:".streamname",streamer:".info > .meta > .streamer",songtitle:".songtitle",prevCoverButton:".info > .cover > .triangle.triangle-left",nextCoverButton:".info > .cover > .triangle.triangle-right",listeners:".info > .stats > .listeners",maxlisteners:".info > .stats > .maxlisteners",volume:".info > .volume > input[type=range]"};for(var s in this.dom)this.dom.hasOwnProperty(s)&&(this.dom[s]=document.querySelector(this.dom[s]));this.playButton=e.querySelector(".playbutton"),this.muteButton=e.querySelector(".mute"),this.stopButton=e.querySelector(".stop"),this.play=function(){"stopped"===this.state||"paused"===this.state?(this.stream.play(),this.state="playing"):(this.stream.pause(),this.state="paused"),this.updateControls()},this.mute=function(){this.mutedState?this.stream.unmute():this.stream.mute(),this.mutedState=!this.mutedState,this.mutedState?this.muteButton.classList.add("muted"):this.muteButton.classList.remove("muted")},this.stop=function(){this.stream.audio.currentTime=0;var t=this.stream.audio.src;this.stream.audio.src="",this.stream.audio.src=t,this.state="stopped",this.updateControls()},this.updateControls=function(){"playing"===this.state?this.playButton.classList.add("paused"):"paused"===this.state?this.playButton.classList.remove("paused"):"stopped"===this.state&&(this.playButton.classList.remove("paused"),this.stopButton.classList.toggle("stopped"))},this.setCover=function(t){if(this.currentCover=t,this.history[0].fetched){0===t?this.dom.nextCoverButton.classList.add("disabled"):t===this.history.length-1?this.dom.prevCoverButton.classList.add("disabled"):(this.dom.prevCoverButton.classList.remove("disabled"),this.dom.nextCoverButton.classList.remove("disabled"));var e;this.history[t].fetched.hasOwnProperty("cover")?(e=this.history[t].fetched.cover,this.dom.songtitle.textContent=this.history[t].fetched.trackName,this.dom.artist.textContent=this.history[t].fetched.artist):(e=this.unknownCover,this.dom.songtitle.textContent=this.history[t].title.split(" - ")[0],this.dom.artist.textContent=this.history[t].title.split(" - ")[1]||" "),this.dom.cover.style.background="#323232 url('"+e+"') no-repeat 50% 50% / cover",this.dom.backgroundCover.style.background="#323232 url('"+e+"') no-repeat 50% 50%/auto 110%"}},this.nextCover=function(){return this.currentCover>0&&(this.currentCover--,this.setCover(this.currentCover)),this.currentCover},this.prevCover=function(){return this.currentCover<this.history.length-1&&(this.currentCover++,this.setCover(this.currentCover)),this.currentCover},this.updateVolume=function(t){this.stream.setVolume(t.target.value)},this.playButton.addEventListener("click",this.play.bind(this)),this.muteButton.addEventListener("click",this.mute.bind(this)),this.stopButton.addEventListener("click",this.stop.bind(this)),this.dom.volume.addEventListener("input",this.updateVolume.bind(this)),this.dom.nextCoverButton.addEventListener("click",this.nextCover.bind(this)),this.dom.prevCoverButton.addEventListener("click",this.prevCover.bind(this)),document.addEventListener("statsFetched",function(t){t.detail.error||(this.dom.streamname.textContent=t.detail.response.servertitle,this.dom.streamer.textContent=t.detail.response.servergenre,this.dom.listeners.textContent=t.detail.response.currentlisteners,this.dom.maxlisteners.textContent=t.detail.response.maxlisteners)}.bind(this)),document.addEventListener("historyFetched",function(t){var e=this;this.history=t.detail.response,this.history.map(function(t){var s=new XMLHttpRequest;s.open("GET","https://itunes.apple.com/search?media=music&term="+t.title.replace(/,* +(|-|&)* */g,"+"),!0),s.addEventListener("readystatechange",function(){if(this.readyState===this.DONE&&200===this.status){var s=""!==this.responseText?JSON.parse(this.responseText):null;if(null!==s&&s.resultCount>0){var i=s.results[0];t.fetched={trackName:i.trackName,artist:i.artistName,cover:i.artworkUrl100}}else t.fetched={};++e.historyCount===e.history.length&&(e.historyCount=0,e.setCover(0))}}),s.send(null)})}.bind(this))}var n=s(1);document.addEventListener("DOMContentLoaded",function(){window.player=new i("http://4stream.pl:18240",document.getElementById("player"))})},function(t,e,s){"use strict";function i(t){var e={"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;","/":"&#x2F;","`":"&#x60;","=":"&#x3D;"};return t.split("").map(function(t){return e[t]||t}).join("")}var n=s(2);t.exports=function(t,e){this.url=t,this.options=e||{historyTimeout:45e3,statsTimeout:2e4,path:{history:"/played",stats:"/stats"},streamID:1},this.audio=new Audio(t+"/;"),this.statsFetchedEvent=new CustomEvent("statsFetched",{detail:null}),this.historyFetchedEvent=new CustomEvent("historyFetched",{detail:null}),this.statsInterval=null,this.historyInterval=null,this.mute=function(){this.audio.mute=!this.audio.mute},this.fetchStats=function(){n({url:this.url+this.options.path.stats+"?json=1&sid="+this.options.streamID,success:function(t){for(var e in t)t.hasOwnProperty(e)&&"string"==typeof t[e]&&(t[e]=i(t[e]));this.historyFetchedEvent=new CustomEvent("statsFetched",{detail:{response:t,error:null}}),document.dispatchEvent(this.historyFetchedEvent)},error:function(t){this.historyFetchedEvent=new CustomEvent("statsFetched",{detail:{response:null,error:t}}),document.dispatchEvent(this.historyFetchedEvent)}})},this.fetchHistory=function(){n({url:this.url+this.options.path.history+"?type=json",success:function(t){for(var e in t)t.hasOwnProperty(e)&&"string"==typeof t[e]&&(t[e]=i(t[e]));this.historyFetchedEvent=new CustomEvent("historyFetched",{detail:{response:t,error:null}}),document.dispatchEvent(this.historyFetchedEvent)},error:function(t){this.historyFetchedEvent=new CustomEvent("historyFetched",{detail:{response:null,error:t}}),document.dispatchEvent(this.historyFetchedEvent)}})},this.fetch=function(t,e){this.fetchHistory(e),this.fetchStats(t),this.statsInterval=setInterval(function(){this.fetchStats(t)}.bind(this),this.options.statsTimeout),this.historyInterval=setInterval(function(){this.fetchHistory(e)}.bind(this),this.options.historyTimeout)},this.stopFetching=function(){clearInterval(this.statsInterval),clearInterval(this.historyInterval)},this.play=function(){this.audio.play(),this.fetch(this.statsCallback,this.historyCallback)},this.pause=function(){this.audio.pause(),this.stopFetching()},this.mute=function(){this.audio.muted=!0},this.unmute=function(){this.audio.muted=!1},this.setVolume=function(t){return t>=0&&t<=1&&(this.audio.volume=t,!0)}}},function(t,e,s){var i;(function(t){(function(){var n,o,r,a,h,u,c,d;r=function(t){return window.document.createElement(t)},a=window.encodeURIComponent,c=Math.random,n=function(t){var e,s,i,n,a,u,c;if(null==t&&(t={}),u={data:t.data||{},error:t.error||h,success:t.success||h,beforeSend:t.beforeSend||h,complete:t.complete||h,url:t.url||""},u.computedUrl=o(u),0===u.url.length)throw new Error("MissingUrl");return n=!1,!1!==u.beforeSend({},u)&&(i=t.callbackName||"callback",s=t.callbackFunc||"jsonp_"+d(15),e=u.data[i]=s,window[e]=function(t){return window[e]=null,u.success(t,u),u.complete(t,u)},(c=r("script")).src=o(u),c.async=!0,c.onerror=function(t){return u.error({url:c.src,event:t}),u.complete({url:c.src,event:t},u)},c.onload=c.onreadystatechange=function(){var t,e;if(!(n||"loaded"!==(t=this.readyState)&&"complete"!==t))return n=!0,c?(c.onload=c.onreadystatechange=null,null!=(e=c.parentNode)&&e.removeChild(c),c=null):void 0},(a=window.document.getElementsByTagName("head")[0]||window.document.documentElement).insertBefore(c,a.firstChild)),{abort:function(){if(window[e]=function(){return window[e]=null},n=!0,null!=c?c.parentNode:void 0)return c.onload=c.onreadystatechange=null,c.parentNode.removeChild(c),c=null}}},h=function(){},o=function(t){var e;return e=t.url,e+=t.url.indexOf("?")<0?"?":"&",e+=u(t.data)},d=function(t){var e;for(e="";e.length<t;)e+=c().toString(36).slice(2,3);return e},u=function(t){var e,s;return function(){var i;i=[];for(e in t)s=t[e],i.push(a(e)+"="+a(s));return i}().join("&")},(null!==s(4)?s(5):void 0)?void 0!==(i=function(){return n}.call(e,s,e,t))&&(t.exports=i):(void 0!==t&&null!==t?t.exports:void 0)?t.exports=n:this.JSONP=n}).call(this)}).call(e,s(3)(t))},function(t,e){t.exports=function(t){return t.webpackPolyfill||(t.deprecate=function(){},t.paths=[],t.children=[],t.webpackPolyfill=1),t}},function(t,e){t.exports=function(){throw new Error("define cannot be used indirect")}},function(t,e){(function(e){t.exports=e}).call(e,{})}]);
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId])
+/******/ 			return installedModules[moduleId].exports;
+
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			exports: {},
+/******/ 			id: moduleId,
+/******/ 			loaded: false
+/******/ 		};
+
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+
+/******/ 		// Flag the module as loaded
+/******/ 		module.loaded = true;
+
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+
+
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(0);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	var Shoutcast = __webpack_require__(1);
+
+	function Player(url, element, options) {
+	  this.options = options || {};
+	  var defaultOptions = {
+	    historySize: 50,
+	    unknownCover: 'http://i.imgur.com/NpYCAVP.png'
+	  };
+	  for(var property in defaultOptions) {
+	    if(defaultOptions.hasOwnProperty(property) && !this.options.hasOwnProperty(property)) {
+	      this.options[property] = defaultOptions[property];
+	    }
+	  }
+	  this.stream =  new Shoutcast(url, options);
+	  this.player = element;
+	  this.currentCover = 0;
+	  this.historyFetched = 0;
+	  this.historyUnfetched = 0;
+	  this.history = [];
+
+	  this.state = 'paused';
+	  this.mutedState = false;
+	  this.dom = {
+	    cover: '.cover > .image',
+	    backgroundCover: '.background-cover',
+	    artist: '.artist',
+	    streamname: '.streamname',
+	    streamer: '.info > .meta > .streamer',
+	    songtitle: '.songtitle',
+	    prevCoverButton: '.info > .cover > .triangle.triangle-left',
+	    nextCoverButton: '.info > .cover > .triangle.triangle-right',
+	    listeners: '.info > .stats > .listeners',
+	    maxlisteners: '.info > .stats > .maxlisteners',
+	    volume: '.info > .volume > input[type=range]'
+	  };
+	  for(var key in this.dom) {
+	    if(this.dom.hasOwnProperty(key)) {
+	      this.dom[key] = document.querySelector(this.dom[key]);
+	    }
+	  }
+	  this.playButton = element.querySelector('.playbutton');
+	  this.muteButton = element.querySelector('.mute');
+	  this.stopButton = element.querySelector('.stop');
+	  this.play = function() {
+	    if(this.state === 'stopped' || this.state === 'paused') {
+	      this.stream.play();
+	      this.state = 'playing';
+	    } else {
+	      this.stream.pause();
+	      this.state = 'paused';
+	    }
+	    this.updateControls();
+	  };
+
+	  this.mute = function() {
+	    if(this.mutedState) {
+	      this.stream.unmute();
+	    } else {
+	      this.stream.mute();
+	    }
+	    this.mutedState = !this.mutedState;
+	    if(this.mutedState) {
+	      this.muteButton.classList.add('muted');
+	    } else {
+	      this.muteButton.classList.remove('muted');
+	    }
+	  };
+
+	  this.stop = function()  {
+	    this.stream.audio.currentTime = 0;
+	    var temp = this.stream.audio.src;
+	    this.stream.audio.src = '';
+	    this.stream.audio.src = temp;
+	    this.state = 'stopped';
+	    this.updateControls();
+	  };
+	  this.updateControls = function() {
+	    if(this.state === 'playing') {
+	      this.playButton.classList.add('paused');
+	    } else if(this.state === 'paused') {
+	      this.playButton.classList.remove('paused');
+	    } else if(this.state === 'stopped') {
+	      this.playButton.classList.remove('paused');
+	      this.stopButton.classList.toggle('stopped');
+	    }
+	  };
+	  this.setCover = function(nth) {
+	    this.currentCover = nth;
+	    if(this.history[0].fetched) {
+	      if(nth === 0) {
+	        this.dom.nextCoverButton.classList.add('disabled');
+	      } else if(nth === this.history.length-1) {
+	        this.dom.prevCoverButton.classList.add('disabled');
+	      } else {
+	        this.dom.prevCoverButton.classList.remove('disabled');
+	        this.dom.nextCoverButton.classList.remove('disabled');
+	      }
+	      var coverUrl;
+	      if(this.history[nth].fetched.hasOwnProperty('cover')) {
+	        coverUrl = this.history[nth].fetched.cover;
+	        this.dom.songtitle.textContent = this.history[nth].fetched.trackName;
+	        this.dom.artist.textContent = this.history[nth].fetched.artist;
+	      } else {
+	        coverUrl = this.options.unknownCover;
+	        this.dom.songtitle.textContent = this.history[nth].title.split(' - ')[0];
+	        this.dom.artist.textContent = this.history[nth].title.split(' - ')[1] || ' ';
+	      }
+	      this.dom.cover.style.background = '#323232 url(\''+coverUrl+'\') no-repeat 50% 50% / cover';
+	      this.dom.backgroundCover.style.background = '#323232 url(\''+coverUrl+'\') no-repeat 50% 50%/auto 110%';
+	    }
+	  };
+	  this.nextCover = function() {
+	    if(this.currentCover>0) {
+	      this.currentCover--;
+	      this.setCover(this.currentCover);
+	    }
+	    return this.currentCover;
+	  };
+	  this.prevCover = function() {
+	    if(this.currentCover<(this.history.length-1)) {
+	      this.currentCover++;
+	      this.setCover(this.currentCover);
+	    }
+	    return this.currentCover;
+	  };
+	  this.updateVolume = function(event) {
+	    this.stream.setVolume(event.target.value);
+	  };
+	  this.songExistsInHistory = function(song) {
+	    for(var i=0; i<this.history.length; i++) {
+	      if(song.playedat === this.history[i].playedat) {
+	        return true;
+	      }
+	    }
+	    return false;
+	  };
+	  this.mergeHistory = function(_history) {
+	    _history = _history.reverse();
+	    _history.map(function(song) {
+	      if(!this.songExistsInHistory(song)) {
+	        this.history.unshift(song);
+	      }
+	    }, this);
+	  };
+	  this.countUnfetched = function() {
+	    var count = 0;
+	    this.history.map(function(song) {
+	      if(!song.hasOwnProperty('fetched')) {
+	        count++;
+	      }
+	    }, this);
+	    return count;
+	  };
+	  this.playButton.addEventListener('click', this.play.bind(this));
+	  this.muteButton.addEventListener('click', this.mute.bind(this));
+	  this.stopButton.addEventListener('click', this.stop.bind(this));
+	  this.dom.volume.addEventListener('input', this.updateVolume.bind(this));
+	  this.dom.nextCoverButton.addEventListener('click', this.nextCover.bind(this));
+	  this.dom.prevCoverButton.addEventListener('click', this.prevCover.bind(this));
+	  document.addEventListener('statsFetched', function(event) {
+	    if(!event.detail.error) {
+	      this.dom.streamname.textContent = event.detail.response.servertitle;
+	      this.dom.streamer.textContent = event.detail.response.servergenre;
+	      this.dom.listeners.textContent = event.detail.response.currentlisteners;
+	      this.dom.maxlisteners.textContent = event.detail.response.maxlisteners;
+	    }
+	  }.bind(this));
+	  document.addEventListener('historyFetched', function(event) {
+	    var self = this;
+	    this.mergeHistory(event.detail.response);
+	    this.history.map(function(song) {
+	        if(!song.hasOwnProperty('fetched')) {
+	          this.historyUnfetched++;
+	        var xhr = new XMLHttpRequest();
+	        xhr.open('GET', 'https://itunes.apple.com/search?media=music&term='+song.title.replace(/,* +(|-|&)* */g, '+'), true);
+	        xhr.addEventListener('readystatechange', function() {
+	          if(this.readyState === this.DONE && this.status === 200) {
+	            var songInfo = this.responseText!==''?JSON.parse(this.responseText):null;
+	            if(songInfo !== null && songInfo.resultCount>0) {
+	              var current = songInfo.results[0];
+	              song.fetched = {
+	                trackName: current.trackName,
+	                artist: current.artistName,
+	                cover: current.artworkUrl100
+	              };
+	            } else {
+	              song.fetched = {};
+	            }
+	            self.historyFetched++;
+	            if(self.historyUnfetched === self.historyFetched) {
+	              self.historyUnfetched = 0;
+	              self.historyFetched = 0;
+	              self.setCover(0);
+	            }
+	          }
+	        });
+	        xhr.send(null);
+	      }
+	    }, this);
+	  }.bind(this));
+	}
+
+	document.addEventListener('DOMContentLoaded', function() {
+	  window.player = new Player('http://4stream.pl:18240', document.getElementById('player'));
+	});
+
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	var jsonp = __webpack_require__(2);
+
+	function escapeHTML(string) {
+	  var entityMap = {
+	    '&': '&amp;',
+	    '<': '&lt;',
+	    '>': '&gt;',
+	    '"': '&quot;',
+	    "'": '&#39;',
+	    '/': '&#x2F;',
+	    '`': '&#x60;',
+	    '=': '&#x3D;'
+	  };
+	  return string.split('').map(function(letter) {return entityMap[letter] || letter;}).join('');
+	}
+	module.exports = function(url, options) {
+	  this.url = url;
+	  this.options = options || {};
+	  var defaultOptions = {historyTimeout: 80000, statsTimeout: 40000, path: {history: '/played', stats: '/stats'}, streamID: 1};
+	  for(var property in defaultOptions) {
+	    if(defaultOptions.hasOwnProperty(property) && !this.options.hasOwnProperty(property)) {
+	      this.options[property] = defaultOptions[property];
+	    }
+	  }
+
+	  this.audio = new Audio(url+'/;');
+
+	  this.statsFetchedEvent = new CustomEvent('statsFetched', {detail: null});
+	  this.historyFetchedEvent = new CustomEvent('historyFetched', {detail: null});
+
+	  this.statsInterval = null;
+	  this.historyInterval = null;
+
+	  this.mute = function () {
+	    this.audio.mute=!this.audio.mute;
+	  };
+	  this.fetchStats = function() {
+	    jsonp({
+	      url: this.url+this.options.path.stats+'?json=1&sid='+this.options.streamID,
+	      success: function(response) {
+	        for(var key in response) {
+	          if( response.hasOwnProperty(key) && typeof response[key] === 'string') {
+	            response[key] = escapeHTML(response[key]);
+	          }
+	        }
+	        this.historyFetchedEvent = new CustomEvent('statsFetched', {detail: {response: response, error: null}});
+	        document.dispatchEvent(this.historyFetchedEvent);
+	      },
+	      error: function(error) {
+	        this.historyFetchedEvent = new CustomEvent('statsFetched', {detail: {response: null, error: error}});
+	        document.dispatchEvent(this.historyFetchedEvent);
+	      }
+	    });
+	  };
+	  this.fetchHistory = function() {
+	    jsonp({
+	      url: this.url+this.options.path.history+'?type=json',
+	      success: function(response) {
+	        for(var key in response) {
+	          if( response.hasOwnProperty(key) && typeof response[key] === 'string') {
+	            response[key] = escapeHTML(response[key]);
+	          }
+	        }
+	        this.historyFetchedEvent = new CustomEvent('historyFetched', {detail: {response: response, error: null}});
+	        document.dispatchEvent(this.historyFetchedEvent);
+	      },
+	      error: function(error) {
+	        this.historyFetchedEvent = new CustomEvent('historyFetched', {detail: {response: null, error: error}});
+	        document.dispatchEvent(this.historyFetchedEvent);
+	      }
+	    });
+	  };
+	  this.fetch = function(statsCallback, historyCallback) {
+	    this.fetchHistory(historyCallback);
+	    this.fetchStats(statsCallback);
+	    this.statsInterval = setInterval(
+	      function() {
+	        this.fetchStats(statsCallback);
+	      }.bind(this), this.options.statsTimeout);
+
+	    this.historyInterval = setInterval(
+	      function() {
+	        this.fetchHistory(historyCallback);
+	      }.bind(this), this.options.historyTimeout);
+	  };
+	  this.stopFetching = function() {
+	    clearInterval(this.statsInterval);
+	    clearInterval(this.historyInterval);
+	  };
+	  this.play = function() {
+	    this.audio.play();
+	    this.fetch(this.statsCallback, this.historyCallback);
+	  };
+	  this.pause = function() {
+	    this.audio.pause();
+	    this.stopFetching();
+	  };
+	  this.mute = function() {
+	    this.audio.muted = true;
+	  };
+	  this.unmute = function() {
+	    this.audio.muted = false;
+	  };
+	  this.setVolume = function(level) {
+	    if(level>=0 && level<=1) {
+	      this.audio.volume = level;
+	      return true;
+	    } else {
+	      return false;
+	    }
+	  };
+	};
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module) {(function() {
+	  var JSONP, computedUrl, createElement, encode, noop, objectToURI, random, randomString;
+
+	  createElement = function(tag) {
+	    return window.document.createElement(tag);
+	  };
+
+	  encode = window.encodeURIComponent;
+
+	  random = Math.random;
+
+	  JSONP = function(options) {
+	    var callback, callbackFunc, callbackName, done, head, params, script;
+	    if (options == null) {
+	      options = {};
+	    }
+	    params = {
+	      data: options.data || {},
+	      error: options.error || noop,
+	      success: options.success || noop,
+	      beforeSend: options.beforeSend || noop,
+	      complete: options.complete || noop,
+	      url: options.url || ''
+	    };
+	    params.computedUrl = computedUrl(params);
+	    if (params.url.length === 0) {
+	      throw new Error('MissingUrl');
+	    }
+	    done = false;
+	    if (params.beforeSend({}, params) !== false) {
+	      callbackName = options.callbackName || 'callback';
+	      callbackFunc = options.callbackFunc || 'jsonp_' + randomString(15);
+	      callback = params.data[callbackName] = callbackFunc;
+	      window[callback] = function(data) {
+	        window[callback] = null;
+	        params.success(data, params);
+	        return params.complete(data, params);
+	      };
+	      script = createElement('script');
+	      script.src = computedUrl(params);
+	      script.async = true;
+	      script.onerror = function(evt) {
+	        params.error({
+	          url: script.src,
+	          event: evt
+	        });
+	        return params.complete({
+	          url: script.src,
+	          event: evt
+	        }, params);
+	      };
+	      script.onload = script.onreadystatechange = function() {
+	        var ref, ref1;
+	        if (done || ((ref = this.readyState) !== 'loaded' && ref !== 'complete')) {
+	          return;
+	        }
+	        done = true;
+	        if (script) {
+	          script.onload = script.onreadystatechange = null;
+	          if ((ref1 = script.parentNode) != null) {
+	            ref1.removeChild(script);
+	          }
+	          return script = null;
+	        }
+	      };
+	      head = window.document.getElementsByTagName('head')[0] || window.document.documentElement;
+	      head.insertBefore(script, head.firstChild);
+	    }
+	    return {
+	      abort: function() {
+	        window[callback] = function() {
+	          return window[callback] = null;
+	        };
+	        done = true;
+	        if (script != null ? script.parentNode : void 0) {
+	          script.onload = script.onreadystatechange = null;
+	          script.parentNode.removeChild(script);
+	          return script = null;
+	        }
+	      }
+	    };
+	  };
+
+	  noop = function() {
+	    return void 0;
+	  };
+
+	  computedUrl = function(params) {
+	    var url;
+	    url = params.url;
+	    url += params.url.indexOf('?') < 0 ? '?' : '&';
+	    url += objectToURI(params.data);
+	    return url;
+	  };
+
+	  randomString = function(length) {
+	    var str;
+	    str = '';
+	    while (str.length < length) {
+	      str += random().toString(36).slice(2, 3);
+	    }
+	    return str;
+	  };
+
+	  objectToURI = function(obj) {
+	    var data, key, value;
+	    data = (function() {
+	      var results;
+	      results = [];
+	      for (key in obj) {
+	        value = obj[key];
+	        results.push(encode(key) + '=' + encode(value));
+	      }
+	      return results;
+	    })();
+	    return data.join('&');
+	  };
+
+	  if ("function" !== "undefined" && __webpack_require__(4) !== null ? __webpack_require__(5) : void 0) {
+	    !(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
+	      return JSONP;
+	    }.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	  } else if (typeof module !== "undefined" && module !== null ? module.exports : void 0) {
+	    module.exports = JSONP;
+	  } else {
+	    this.JSONP = JSONP;
+	  }
+
+	}).call(this);
+
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)(module)))
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports) {
+
+	module.exports = function(module) {
+		if(!module.webpackPolyfill) {
+			module.deprecate = function() {};
+			module.paths = [];
+			// module.parent = undefined by default
+			module.children = [];
+			module.webpackPolyfill = 1;
+		}
+		return module;
+	}
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports) {
+
+	module.exports = function() { throw new Error("define cannot be used indirect"); };
+
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports) {
+
+	/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {module.exports = __webpack_amd_options__;
+
+	/* WEBPACK VAR INJECTION */}.call(exports, {}))
+
+/***/ })
+/******/ ]);

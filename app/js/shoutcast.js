@@ -16,7 +16,13 @@ function escapeHTML(string) {
 }
 module.exports = function(url, options) {
   this.url = url;
-  this.options = options || {historyTimeout: 45000, statsTimeout: 20000, path: {history: '/played', stats: '/stats'}, streamID: 1};
+  this.options = options || {};
+  var defaultOptions = {historyTimeout: 80000, statsTimeout: 40000, path: {history: '/played', stats: '/stats'}, streamID: 1};
+  for(var property in defaultOptions) {
+    if(defaultOptions.hasOwnProperty(property) && !this.options.hasOwnProperty(property)) {
+      this.options[property] = defaultOptions[property];
+    }
+  }
 
   this.audio = new Audio(url+'/;');
 

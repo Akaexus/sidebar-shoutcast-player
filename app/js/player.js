@@ -1,14 +1,23 @@
 'use strict';
 var Shoutcast = require('./shoutcast.js');
 
-function Player(url, element) {
-  this.unknownCover = 'http://i.imgur.com/NpYCAVP.png';
-
-  this.stream =  new Shoutcast(url);
+function Player(url, element, options) {
+  this.options = options || {};
+  var defaultOptions = {
+    historySize: 50,
+    unknownCover: 'http://i.imgur.com/NpYCAVP.png'
+  };
+  for(var property in defaultOptions) {
+    if(defaultOptions.hasOwnProperty(property) && !this.options.hasOwnProperty(property)) {
+      this.options[property] = defaultOptions[property];
+    }
+  }
+  this.stream =  new Shoutcast(url, options);
   this.player = element;
   this.currentCover = 0;
-  this.historyCount = 0;
-  this.history = null;
+  this.historyFetched = 0;
+  this.historyUnfetched = 0;
+  this.history = [];
 
   this.state = 'paused';
   this.mutedState = false;
@@ -93,7 +102,7 @@ function Player(url, element) {
         this.dom.songtitle.textContent = this.history[nth].fetched.trackName;
         this.dom.artist.textContent = this.history[nth].fetched.artist;
       } else {
-        coverUrl = this.unknownCover;
+        coverUrl = this.options.unknownCover;
         this.dom.songtitle.textContent = this.history[nth].title.split(' - ')[0];
         this.dom.artist.textContent = this.history[nth].title.split(' - ')[1] || ' ';
       }
@@ -118,6 +127,31 @@ function Player(url, element) {
   this.updateVolume = function(event) {
     this.stream.setVolume(event.target.value);
   };
+  this.songExistsInHistory = function(song) {
+    for(var i=0; i<this.history.length; i++) {
+      if(song.playedat === this.history[i].playedat) {
+        return true;
+      }
+    }
+    return false;
+  };
+  this.mergeHistory = function(_history) {
+    _history = _history.reverse();
+    _history.map(function(song) {
+      if(!this.songExistsInHistory(song)) {
+        this.history.unshift(song);
+      }
+    }, this);
+  };
+  this.countUnfetched = function() {
+    var count = 0;
+    this.history.map(function(song) {
+      if(!song.hasOwnProperty('fetched')) {
+        count++;
+      }
+    }, this);
+    return count;
+  };
   this.playButton.addEventListener('click', this.play.bind(this));
   this.muteButton.addEventListener('click', this.mute.bind(this));
   this.stopButton.addEventListener('click', this.stop.bind(this));
@@ -134,32 +168,36 @@ function Player(url, element) {
   }.bind(this));
   document.addEventListener('historyFetched', function(event) {
     var self = this;
-    this.history = event.detail.response;
+    this.mergeHistory(event.detail.response);
     this.history.map(function(song) {
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET', 'https://itunes.apple.com/search?media=music&term='+song.title.replace(/,* +(|-|&)* */g, '+'), true);
-      xhr.addEventListener('readystatechange', function() {
-        if(this.readyState === this.DONE && this.status === 200) {
-          var songInfo = this.responseText!==''?JSON.parse(this.responseText):null;
-          if(songInfo !== null && songInfo.resultCount>0) {
-            var current = songInfo.results[0];
-            song.fetched = {
-              trackName: current.trackName,
-              artist: current.artistName,
-              cover: current.artworkUrl100
-            };
-          } else {
-            song.fetched = {};
+        if(!song.hasOwnProperty('fetched')) {
+          this.historyUnfetched++;
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', 'https://itunes.apple.com/search?media=music&term='+song.title.replace(/,* +(|-|&)* */g, '+'), true);
+        xhr.addEventListener('readystatechange', function() {
+          if(this.readyState === this.DONE && this.status === 200) {
+            var songInfo = this.responseText!==''?JSON.parse(this.responseText):null;
+            if(songInfo !== null && songInfo.resultCount>0) {
+              var current = songInfo.results[0];
+              song.fetched = {
+                trackName: current.trackName,
+                artist: current.artistName,
+                cover: current.artworkUrl100
+              };
+            } else {
+              song.fetched = {};
+            }
+            self.historyFetched++;
+            if(self.historyUnfetched === self.historyFetched) {
+              self.historyUnfetched = 0;
+              self.historyFetched = 0;
+              self.setCover(0);
+            }
           }
-          self.historyCount++;
-          if(self.historyCount === self.history.length) {
-            self.historyCount = 0;
-            self.setCover(0);
-          }
-        }
-      });
-      xhr.send(null);
-    });
+        });
+        xhr.send(null);
+      }
+    }, this);
   }.bind(this));
 }
 
