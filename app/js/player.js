@@ -22,6 +22,8 @@ function Player(url, element, options) {
   this.state = 'paused';
   this.mutedState = false;
   this.dom = {
+    player: '#player',
+    coverParent: '.cover',
     cover: '.cover > .image',
     backgroundCover: '.background-cover',
     artist: '.artist',
@@ -32,13 +34,21 @@ function Player(url, element, options) {
     nextCoverButton: '.info > .cover > .triangle.triangle-right',
     listeners: '.info > .stats > .listeners',
     maxlisteners: '.info > .stats > .maxlisteners',
-    volume: '.info > .volume > input[type=range]'
+    volume: '.info > .volume > input[type=range]',
+    canvas: '.info > .cover > canvas'
   };
   for(var key in this.dom) {
     if(this.dom.hasOwnProperty(key)) {
       this.dom[key] = document.querySelector(this.dom[key]);
     }
   }
+  this.ctx = null;
+  if(this.dom.canvas) {
+    this.ctx = this.dom.canvas.getContext('2d');
+  }
+  this.animFrame = null;
+  this.maxSpectrumHeight = 0.1;
+
   this.playButton = element.querySelector('.playbutton');
   this.muteButton = element.querySelector('.mute');
   this.stopButton = element.querySelector('.stop');
@@ -46,9 +56,11 @@ function Player(url, element, options) {
     if(this.state === 'stopped' || this.state === 'paused') {
       this.stream.play();
       this.state = 'playing';
+      this.draw();
     } else {
       this.stream.pause();
       this.state = 'paused';
+      window.cancelAnimationFrame(this.animFrame);
     }
     this.updateControls();
   };
@@ -110,6 +122,75 @@ function Player(url, element, options) {
       this.dom.backgroundCover.style.background = '#323232 url(\''+coverUrl+'\') no-repeat 50% 50%/auto 110%';
     }
   };
+  this.smooth = function(array, smoothing) {
+    var newArray = [];
+    for (var i = 0; i<array.length; i++) {
+      var sum = 0;
+      for (var index = i-smoothing; index<=i+smoothing; index++) {
+        var thisIndex;
+        if(index<0) {
+          thisIndex = 0;
+        } else if(index>=array.length) {
+          thisIndex = array.length-1;
+        } else {
+          thisIndex = index;
+        }
+        sum += array[thisIndex];
+      }
+      newArray[i] = sum/((smoothing*2)+1);
+    }
+    return newArray;
+  };
+  this.draw = function() {
+    this.analyser.getByteFrequencyData(this.frequency);
+    var nOfBars = parseInt((0.6*this.dom.canvas.width)/3),
+        freqLinesPerBar = parseInt(this.frequency.length/nOfBars);
+    var bars = new Array(nOfBars);
+    for(var i=0; i<nOfBars; i++) {
+      var values = this.frequency.slice(freqLinesPerBar*i, freqLinesPerBar*(i+1));
+      bars[i] = this.maxSpectrumHeight*values.reduce(function(a, b) {return a+b;})/values.length;
+    }
+    bars = this.smooth(bars, 1);
+    this.ctx.clearRect(0,0,this.dom.canvas.width,this.dom.canvas.height);
+    // var myGradient = this.ctx.createLinearGradient(0, 0, 0, this.dom.canvas.height);
+    var hOfW = this.dom.canvas.height/2;
+    var myGradient = this.ctx.createRadialGradient(hOfW, hOfW, 10, hOfW, hOfW, hOfW*2);
+    myGradient.addColorStop(0, "rgba(255, 255, 255, 0.8)");
+    myGradient.addColorStop(1, "rgba(255, 255, 255, 0.3)");
+    this.ctx.fillStyle = myGradient;
+    var startX = this.dom.canvas.width*0.2;
+    var startX2 = this.dom.canvas.width*0.8;
+    var startY = this.dom.canvas.width*0.18;
+    var startY2 = this.dom.canvas.width*0.78;
+    for(var i=0, offset = 0; i<bars.length; i++, offset+=3) {
+      this.ctx.fillRect(offset+startX, startY-bars[i], 2, bars[i]);
+      this.ctx.fillRect(startX2, startY+offset, bars[i], 2);
+      this.ctx.fillRect(startX, startY2-offset, -bars[i], -2);
+    }
+    // for(var i=0; i<this.frequency.length; i++) {
+    //   this.ctx.beginPath();
+    //   this.ctx.moveTo(i, 0);
+    //   this.ctx.lineTo(i, this.frequency[i]);
+    //   this.ctx.stroke();
+    // }
+    this.animFrame = window.requestAnimationFrame(this.draw.bind(this));
+  };
+  this.initializeCanvas = function() {
+    if(this.dom.canvas) {
+      this.ctx.canvas.width = this.dom.coverParent.offsetWidth;
+      this.ctx.canvas.height = this.dom.coverParent.offsetHeight;
+      this.stream.audio.crossOrigin = 'anonymous';
+      this.context = new AudioContext();
+      this.analyser = this.context.createAnalyser();
+      this.analyser.connect(this.context.destination);
+      this.source = this.context.createMediaElementSource(this.stream.audio);
+      this.source.connect(this.analyser);
+      this.analyser.connect(this.context.destination);
+      this.frequency = new Uint8Array(this.analyser.frequencyBinCount);
+    } else {
+      console.log('Chuj');
+    }
+  };
   this.nextCover = function() {
     if(this.currentCover>0) {
       this.currentCover--;
@@ -166,6 +247,7 @@ function Player(url, element, options) {
       this.dom.maxlisteners.textContent = event.detail.response.maxlisteners;
     }
   }.bind(this));
+  this.initializeCanvas();
   document.addEventListener('historyFetched', function(event) {
     var self = this;
     this.mergeHistory(event.detail.response);
