@@ -134,10 +134,9 @@ function Player(url, element, options) {
       bars[i] = this.maxSpectrumHeight*values.reduce(function(a, b) {return a+b;})/values.length;
     }
     this.ctx.clearRect(0,0,this.dom.canvas.width,this.dom.canvas.height);
-    var myGradient = this.ctx.createLinearGradient(0, 0, this.dom.canvas.width, 0);
-    myGradient.addColorStop(0, "rgba(255, 255, 255, 0.2)");
-    myGradient.addColorStop(0.5, "rgba(255, 255, 255, 0.8)");
-    myGradient.addColorStop(1, "rgba(255, 255, 255, 0.2)");
+    var myGradient = this.ctx.createLinearGradient(0, 0, 0, this.dom.canvas.height);
+    myGradient.addColorStop(0, "rgba(255, 255, 255, 0.7)");
+    myGradient.addColorStop(1, "rgba(255, 255, 255, 0.01)");
     this.ctx.fillStyle = myGradient;
     for(var i=0, offset = 0; i<bars.length; i++, offset+=3) {
       this.ctx.fillRect(0, offset, bars[i], 2);
