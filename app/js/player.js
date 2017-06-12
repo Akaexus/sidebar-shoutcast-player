@@ -49,16 +49,7 @@ function Player(url, element, options) {
   }
   this.animFrame = null;
   this.maxSpectrumHeight = 0.1;
-  this.wavePos = {
-    start: {
-      x: 0.2,
-      y: 0.18
-    },
-    end: {
-      x: 0.8,
-      y: 0.78,
-    }
-  };
+
   //Controls
   this.playButton = element.querySelector('.playbutton');
   this.muteButton = element.querySelector('.mute');
@@ -133,62 +124,32 @@ function Player(url, element, options) {
       this.dom.backgroundCover.style.background = '#323232 url(\''+coverUrl+'\') no-repeat 50% 50%/auto 110%';
     }
   };
-  this.smooth = function(array, smoothing) {
-    var newArray = [];
-    for (var i = 0; i<array.length; i++) {
-      var sum = 0;
-      for (var index = i-smoothing; index<=i+smoothing; index++) {
-        var thisIndex;
-        if(index<0) {
-          thisIndex = 0;
-        } else if(index>=array.length) {
-          thisIndex = array.length-1;
-        } else {
-          thisIndex = index;
-        }
-        sum += array[thisIndex];
-      }
-      newArray[i] = sum/((smoothing*2)+1);
-    }
-    return newArray;
-  };
   this.draw = function() {
     this.analyser.getByteFrequencyData(this.frequency);
-    var nOfBars = parseInt((0.6*this.dom.canvas.width)/3),
-        freqLinesPerBar = parseInt(this.frequency.length/nOfBars);
+    var nOfBars = parseInt(this.dom.canvas.width/3),
+        freqLinesPerBar = parseInt(0.9*this.frequency.length/nOfBars);
     var bars = new Array(nOfBars);
     for(var i=0; i<nOfBars; i++) {
       var values = this.frequency.slice(freqLinesPerBar*i, freqLinesPerBar*(i+1));
       bars[i] = this.maxSpectrumHeight*values.reduce(function(a, b) {return a+b;})/values.length;
     }
-    bars = this.smooth(bars, 1);
     this.ctx.clearRect(0,0,this.dom.canvas.width,this.dom.canvas.height);
-    // var myGradient = this.ctx.createLinearGradient(0, 0, 0, this.dom.canvas.height);
-    var hOfW = this.dom.canvas.height/2;
-    var myGradient = this.ctx.createRadialGradient(hOfW, hOfW, 10, hOfW, hOfW, hOfW*2);
-    myGradient.addColorStop(0, "rgba(255, 255, 255, 0.8)");
-    myGradient.addColorStop(1, "rgba(255, 255, 255, 0.3)");
+    var myGradient = this.ctx.createLinearGradient(0, 0, this.dom.canvas.width, 0);
+    myGradient.addColorStop(0, "rgba(255, 255, 255, 0.2)");
+    myGradient.addColorStop(0.5, "rgba(255, 255, 255, 0.8)");
+    myGradient.addColorStop(1, "rgba(255, 255, 255, 0.2)");
     this.ctx.fillStyle = myGradient;
     for(var i=0, offset = 0; i<bars.length; i++, offset+=3) {
-      this.ctx.fillRect(offset+this.wavePos.start.x, this.wavePos.start.y-bars[i], 2, bars[i]);
-      this.ctx.fillRect(this.wavePos.end.x, this.wavePos.start.y+offset, bars[i], 2);
-      this.ctx.fillRect(this.wavePos.start.x, this.wavePos.end.y-offset, -bars[i], -2);
+      this.ctx.fillRect(0, offset, bars[i], 2);
+      this.ctx.fillRect(this.dom.canvas.width, offset, -bars[i], 2);
     }
+
     this.animFrame = window.requestAnimationFrame(this.draw.bind(this));
   };
   this.initializeCanvas = function() {
     if(this.dom.canvas) {
       this.ctx.canvas.width = this.dom.coverParent.offsetWidth;
       this.ctx.canvas.height = this.dom.coverParent.offsetHeight;
-      for(var pos in this.wavePos) {
-        if(this.wavePos.hasOwnProperty(pos)) {
-          for(var coordinate in this.wavePos[pos]) {
-            if(this.wavePos[pos].hasOwnProperty(coordinate)) {
-              this.wavePos[pos][coordinate]*=this.dom.canvas.width;
-            }
-          }
-        }
-      }
       this.stream.audio.crossOrigin = 'anonymous';
       this.context = new AudioContext();
       this.analyser = this.context.createAnalyser();
