@@ -42,13 +42,24 @@ function Player(url, element, options) {
       this.dom[key] = document.querySelector(this.dom[key]);
     }
   }
+  // Canvas
   this.ctx = null;
   if(this.dom.canvas) {
     this.ctx = this.dom.canvas.getContext('2d');
   }
   this.animFrame = null;
   this.maxSpectrumHeight = 0.1;
-
+  this.wavePos = {
+    start: {
+      x: 0.2,
+      y: 0.18
+    },
+    end: {
+      x: 0.8,
+      y: 0.78,
+    }
+  };
+  //Controls
   this.playButton = element.querySelector('.playbutton');
   this.muteButton = element.querySelector('.mute');
   this.stopButton = element.querySelector('.stop');
@@ -158,27 +169,26 @@ function Player(url, element, options) {
     myGradient.addColorStop(0, "rgba(255, 255, 255, 0.8)");
     myGradient.addColorStop(1, "rgba(255, 255, 255, 0.3)");
     this.ctx.fillStyle = myGradient;
-    var startX = this.dom.canvas.width*0.2;
-    var startX2 = this.dom.canvas.width*0.8;
-    var startY = this.dom.canvas.width*0.18;
-    var startY2 = this.dom.canvas.width*0.78;
     for(var i=0, offset = 0; i<bars.length; i++, offset+=3) {
-      this.ctx.fillRect(offset+startX, startY-bars[i], 2, bars[i]);
-      this.ctx.fillRect(startX2, startY+offset, bars[i], 2);
-      this.ctx.fillRect(startX, startY2-offset, -bars[i], -2);
+      this.ctx.fillRect(offset+this.wavePos.start.x, this.wavePos.start.y-bars[i], 2, bars[i]);
+      this.ctx.fillRect(this.wavePos.end.x, this.wavePos.start.y+offset, bars[i], 2);
+      this.ctx.fillRect(this.wavePos.start.x, this.wavePos.end.y-offset, -bars[i], -2);
     }
-    // for(var i=0; i<this.frequency.length; i++) {
-    //   this.ctx.beginPath();
-    //   this.ctx.moveTo(i, 0);
-    //   this.ctx.lineTo(i, this.frequency[i]);
-    //   this.ctx.stroke();
-    // }
     this.animFrame = window.requestAnimationFrame(this.draw.bind(this));
   };
   this.initializeCanvas = function() {
     if(this.dom.canvas) {
       this.ctx.canvas.width = this.dom.coverParent.offsetWidth;
       this.ctx.canvas.height = this.dom.coverParent.offsetHeight;
+      for(var pos in this.wavePos) {
+        if(this.wavePos.hasOwnProperty(pos)) {
+          for(var coordinate in this.wavePos[pos]) {
+            if(this.wavePos[pos].hasOwnProperty(coordinate)) {
+              this.wavePos[pos][coordinate]*=this.dom.canvas.width;
+            }
+          }
+        }
+      }
       this.stream.audio.crossOrigin = 'anonymous';
       this.context = new AudioContext();
       this.analyser = this.context.createAnalyser();
