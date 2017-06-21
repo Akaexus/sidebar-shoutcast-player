@@ -1,5 +1,5 @@
 'use strict';
-var jsonp = require('browser-jsonp');
+var nanoajax = require('nanoajax');
 
 function escapeHTML(string) {
   var entityMap = {
@@ -17,7 +17,7 @@ function escapeHTML(string) {
 module.exports = function(url, options) {
   this.url = url;
   this.options = options || {};
-  var defaultOptions = {historyTimeout: 80000, statsTimeout: 40000, path: {history: '/played', stats: '/stats'}, streamID: 1};
+  var defaultOptions = {historyTimeout: 120000, statsTimeout: 60000, path: {history: '/played', stats: '/stats'}, streamID: 1};
   for(var property in defaultOptions) {
     if(defaultOptions.hasOwnProperty(property) && !this.options.hasOwnProperty(property)) {
       this.options[property] = defaultOptions[property];
@@ -35,40 +35,37 @@ module.exports = function(url, options) {
   this.mute = function () {
     this.audio.mute=!this.audio.mute;
   };
-  this.fetchStats = function() {
-    jsonp({
-      url: this.url+this.options.path.stats+'?json=1&sid='+this.options.streamID,
-      success: function(response) {
-        for(var key in response) {
-          if( response.hasOwnProperty(key) && typeof response[key] === 'string') {
-            response[key] = escapeHTML(response[key]);
+  this.fetchResource = function(fetchOptions) {
+    nanoajax.ajax({url: 'https://crossorigin.me/'+fetchOptions.path}, function(status, data) {
+      if(status === 200) {
+        try {
+          data = JSON.parse(data);
+          for(var key in data) {
+            if( data.hasOwnProperty(key) && typeof data[key] === 'string') {
+              data[key] = escapeHTML(data[key]);
+            }
           }
-        }
-        this.historyFetchedEvent = new CustomEvent('statsFetched', {detail: {response: response, error: null}});
-        document.dispatchEvent(this.historyFetchedEvent);
-      },
-      error: function(error) {
-        this.historyFetchedEvent = new CustomEvent('statsFetched', {detail: {response: null, error: error}});
-        document.dispatchEvent(this.historyFetchedEvent);
+          fetchOptions.customEvent = new CustomEvent(fetchOptions.resourceType+'Fetched', {detail: {response: data, error: null}});
+          document.dispatchEvent(fetchOptions.customEvent);
+          return 0;
+        } catch (e) {}
       }
+        fetchOptions.customEvent = new CustomEvent(fetchOptions.resourceType+'Fetched', {detail: {response: null, error: 1}});
+        document.dispatchEvent(fetchOptions.customEvent);
+    }.bind(this));
+  };
+  this.fetchStats = function() {
+    this.fetchResource({
+      customEvent: this.statsFetchedEvent,
+      resourceType: 'stats',
+      path: this.url+this.options.path.stats+'?json=1&sid='+this.options.streamID
     });
   };
   this.fetchHistory = function() {
-    jsonp({
-      url: this.url+this.options.path.history+'?type=json',
-      success: function(response) {
-        for(var key in response) {
-          if( response.hasOwnProperty(key) && typeof response[key] === 'string') {
-            response[key] = escapeHTML(response[key]);
-          }
-        }
-        this.historyFetchedEvent = new CustomEvent('historyFetched', {detail: {response: response, error: null}});
-        document.dispatchEvent(this.historyFetchedEvent);
-      },
-      error: function(error) {
-        this.historyFetchedEvent = new CustomEvent('historyFetched', {detail: {response: null, error: error}});
-        document.dispatchEvent(this.historyFetchedEvent);
-      }
+    this.fetchResource({
+      customEvent: this.historyFetchedEvent,
+      resourceType: 'history',
+      path: this.url+this.options.path.history+'?type=json&sid='+this.options.streamID
     });
   };
   this.fetch = function(statsCallback, historyCallback) {

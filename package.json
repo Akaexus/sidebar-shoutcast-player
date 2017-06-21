@@ -24,6 +24,6 @@
     "webpack-stream": "^3.2.0"
   },
   "dependencies": {
-    "browser-jsonp": "^1.1.5"
+    "nanoajax": "^0.4.3"
   }
 }
