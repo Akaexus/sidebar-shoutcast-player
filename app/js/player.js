@@ -158,7 +158,7 @@ function Player(url, element, options) {
       this.analyser.connect(this.context.destination);
       this.frequency = new Uint8Array(this.analyser.frequencyBinCount);
     } else {
-      console.log('Chuj');
+      return false;
     }
   };
   this.nextCover = function() {
